@@ -315,7 +315,7 @@ namespace Oxide.Plugins
         #region Mettods
 
         private int serverId = -1;
-        private double coins = 0;
+        private double coins = 00;
 
         private void AddMoney(BasePlayer player, double coin)
         {
