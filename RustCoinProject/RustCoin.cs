@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.25")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.26")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -352,7 +352,7 @@ namespace Oxide.Plugins
         private string GetImage(string shortname, ulong skin = 0) =>
             (string) ImageLibrary.Call("GetImage", shortname, skin);
 
-        #endregion
+        
 
         void Commands(IPlayer user, string command, string[] args)
         {
@@ -378,7 +378,7 @@ namespace Oxide.Plugins
                 }
             }
         }
-
+        #endregion
 
         #region Mettods
 
