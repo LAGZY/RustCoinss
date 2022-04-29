@@ -320,9 +320,6 @@ namespace Oxide.Plugins
                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "Phone");
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "closebutton");
-            CommunityEntity.ServerInstance.ClientRPCEx(
-                new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
-                main_balance_gui_json.Replace("[BALANCE]", t.coins.ToString(CultureInfo.InvariantCulture)));
 
 
             var avatar = GetImage(player.UserIDString);
@@ -335,6 +332,10 @@ namespace Oxide.Plugins
 
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "AddUI", jsonSend);
+
+
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                main_balance_gui_json.Replace("[BALANCE]", t.coins.ToString(CultureInfo.InvariantCulture)));
         }
 
         private void UpdateBalance(BasePlayer player)
@@ -359,7 +360,6 @@ namespace Oxide.Plugins
 
             switch (args[0])
             {
-                //asdasdasdasd
                 case "main_close":
                 {
                     CommunityEntity.ServerInstance.ClientRPCEx(
