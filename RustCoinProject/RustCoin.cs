@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.26")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.27")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -251,7 +251,6 @@ namespace Oxide.Plugins
                 }
             });
 
-            
 
             main.Add(new CuiElement
             {
@@ -304,10 +303,9 @@ namespace Oxide.Plugins
                     Color = "0, 0, 0, 0",
                     Command = "RCOIN_CONS RCOIN_CLICK.MAINADD"
                 },
-                Text = { Text = ""}
-                
-            },"Phone");
-            
+                Text = {Text = ""}
+            }, "Phone");
+
             main_balance_gui.Add(new CuiLabel
             {
                 RectTransform =
@@ -323,11 +321,12 @@ namespace Oxide.Plugins
                     Align = TextAnchor.MiddleCenter,
                 }
             }, "balance", "balance_amount");
-            
-            
+
+
             main_json = main.ToJson();
             main_balance_gui_json = main_balance_gui.ToJson();
         }
+
         [ChatCommand("rcoin")]
         void OpenMenu(BasePlayer player)
         {
@@ -346,16 +345,17 @@ namespace Oxide.Plugins
             var jsonSend = main_json
                 .Replace("[MAIN_AVATAR]", avatar)
                 .Replace("[NICKNAME]", player.displayName)
-                .Replace("[ID]", t.id.ToString())
-                .Replace("[BALANCE]", t.coins.ToString(CultureInfo.InvariantCulture))
+                .Replace("[ID]", t.id.ToString("0000"))
+                .Replace("[BALANCE]", t.coins.ToString("0.000"))
                 .Replace("[TOP_POSITION]", "00001");
 
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "AddUI", jsonSend);
 
 
-            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
-                main_balance_gui_json.Replace("[BALANCE]", t.coins.ToString(CultureInfo.InvariantCulture)));
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null,
+                "AddUI",
+                main_balance_gui_json.Replace("[BALANCE]", t.coins.ToString("0.000")));
         }
 
         private void UpdateBalance(BasePlayer player)
@@ -366,12 +366,12 @@ namespace Oxide.Plugins
                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "balance_amount");
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
-                main_balance_gui_json.Replace("[BALANCE]", t.coins.ToString(CultureInfo.InvariantCulture)));
+                main_balance_gui_json.Replace("[BALANCE]", t.coins.ToString("0.000")));
         }
 
         private string GetImage(string shortname, ulong skin = 0) =>
             (string) ImageLibrary.Call("GetImage", shortname, skin);
-        
+
         void Commands(IPlayer user, string command, string[] args)
         {
             BasePlayer player = user.Object as BasePlayer;
@@ -392,12 +392,14 @@ namespace Oxide.Plugins
                 {
                     UpdateBalance(player);
                     AddMoney(player, 0.001);
-                    Effect Sound1 = new Effect("assets/bundled/prefabs/fx/notice/loot.drag.grab.fx.prefab", player, 0, new Vector3(), new Vector3());
+                    Effect Sound1 = new Effect("assets/bundled/prefabs/fx/notice/loot.drag.grab.fx.prefab", player, 0,
+                        new Vector3(), new Vector3());
                     EffectNetwork.Send(Sound1, player.Connection);
                     break;
                 }
             }
         }
+
         #endregion
 
         #region Mettods
