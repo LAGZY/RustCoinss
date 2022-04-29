@@ -251,21 +251,7 @@ namespace Oxide.Plugins
                 }
             });
 
-            main_balance_gui.Add(new CuiLabel
-            {
-                RectTransform =
-                {
-                    AnchorMin = "0.5 0.5",
-                    AnchorMax = "0.5 0.5",
-                    OffsetMin = "-60 -10",
-                    OffsetMax = "40 10"
-                },
-                Text =
-                {
-                    Text = "[BALANCE]",
-                    Align = TextAnchor.MiddleCenter,
-                }
-            }, "balance", "balance_amount");
+            
 
             main.Add(new CuiElement
             {
@@ -304,10 +290,44 @@ namespace Oxide.Plugins
                     }
                 }
             });
+            main.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 0.5",
+                    AnchorMax = "0.5 0.5",
+                    OffsetMin = "-60 0",
+                    OffsetMax = "60 120"
+                },
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS RCOIN_CLICK.MAINADD"
+                },
+                Text = { Text = ""}
+                
+            },"Phone");
+            
+            main_balance_gui.Add(new CuiLabel
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 0.5",
+                    AnchorMax = "0.5 0.5",
+                    OffsetMin = "-60 -10",
+                    OffsetMax = "40 10"
+                },
+                Text =
+                {
+                    Text = "[BALANCE]",
+                    Align = TextAnchor.MiddleCenter,
+                }
+            }, "balance", "balance_amount");
+            
+            
             main_json = main.ToJson();
             main_balance_gui_json = main_balance_gui.ToJson();
         }
-
         [ChatCommand("rcoin")]
         void OpenMenu(BasePlayer player)
         {
@@ -343,7 +363,7 @@ namespace Oxide.Plugins
             DataPlayer t;
             if (!_players.TryGetValue(player, out t)) return;
             CommunityEntity.ServerInstance.ClientRPCEx(
-                new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "balance");
+                new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "balance_amount");
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
                 main_balance_gui_json.Replace("[BALANCE]", t.coins.ToString(CultureInfo.InvariantCulture)));
@@ -351,9 +371,7 @@ namespace Oxide.Plugins
 
         private string GetImage(string shortname, ulong skin = 0) =>
             (string) ImageLibrary.Call("GetImage", shortname, skin);
-
         
-
         void Commands(IPlayer user, string command, string[] args)
         {
             BasePlayer player = user.Object as BasePlayer;
@@ -374,6 +392,8 @@ namespace Oxide.Plugins
                 {
                     UpdateBalance(player);
                     AddMoney(player, 0.001);
+                    Effect Sound1 = new Effect("assets/bundled/prefabs/fx/notice/loot.drag.grab.fx.prefab", player, 0, new Vector3(), new Vector3());
+                    EffectNetwork.Send(Sound1, player.Connection);
                     break;
                 }
             }
