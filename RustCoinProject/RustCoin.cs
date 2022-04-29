@@ -349,6 +349,7 @@ namespace Oxide.Plugins
             
             switch (args[0])
             {
+                //asdasdasdasd
                 case "main_close":
                 {
                     CommunityEntity.ServerInstance.ClientRPCEx(
