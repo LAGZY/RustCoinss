@@ -355,7 +355,7 @@ namespace Oxide.Plugins
 
         void Commands(IPlayer user, string command, string[] args)
         {
-            BasePlayer player = user as BasePlayer;
+            BasePlayer player = user.Object as BasePlayer;
 
             switch (args[0])
             {
