@@ -20,10 +20,11 @@ namespace Oxide.Plugins
         void Marker(BasePlayer player)
         {
             var marker = objecGameObject.AddComponent<MonumentMarker>();
-            var land = new LandmarkInfo();
+            var land = objecGameObject.AddComponent<LandmarkInfo>();
             land.transform.position = player.transform.position;
-            marker.Setup(land);
+
             marker.text.text = "0";
+            marker.text.SetActive(true);
             marker.gameObject.AddComponent<TestMarker>();
         }
 
