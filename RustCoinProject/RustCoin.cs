@@ -39,6 +39,14 @@ namespace Oxide.Plugins
             }
         }
 
+        public string main_back = "https://imgur.com/gxOM6f8.png";
+        public string main_border = "https://imgur.com/WvsSWHB.png";
+        public string main_tap = "https://imgur.com/mnFRlYZ.png";
+        public string main_balance = "https://imgur.com/lqwgcN9.png";
+        public string main_buttons = "https://imgur.com/EMHab4A.png";
+        public string main_phone = "https://imgur.com/PDwzpbG.png";
+        public string main_upgrades = "https://imgur.com/5jqO4BC.png";
+        public string upgrade_backimage = "https://imgur.com/7MFgOuM.png";
         private void OnServerInitialized()
         {
             if (!ImageLibrary)
@@ -56,7 +64,16 @@ namespace Oxide.Plugins
             {
                 OnPlayerConnected(basePlayer);
             }
-        }
+            
+            ImageLibrary.Call("AddImage", main_back, main_back); //main_background
+            ImageLibrary.Call("AddImage", main_border, main_border); //main_border
+            ImageLibrary.Call("AddImage", main_tap, main_tap); //main_tap
+            ImageLibrary.Call("AddImage", main_balance, main_balance); //main_balik
+            ImageLibrary.Call("AddImage", main_buttons, main_buttons); //main_buttons
+            ImageLibrary.Call("AddImage", main_phone, main_phone); //main_phone
+            ImageLibrary.Call("AddImage", main_upgrades, main_upgrades); //main_upgrades
+            ImageLibrary.Call("AddImage", upgrade_backimage, upgrade_backimage); //upgrade_backimage
+    }
 
         #endregion
 
@@ -67,10 +84,10 @@ namespace Oxide.Plugins
         private float all_fadein = 0.7f;
 
         private string main_balance_gui_json;
-        private string main_phone_json;
         private string main_json;
         private string upgrades_json;
-        private string upgrades_phone_json;
+        
+        CuiElementContainer upgrades = new CuiElementContainer();
         
         
 
@@ -78,67 +95,11 @@ namespace Oxide.Plugins
 
         void Generate()
         {
-            ///TEST//////////////////////////
 
-            _upgrades.Add(0, new UpgradesInfo
-            {
-                addcoin = 0.001,
-                cost = 0.1,
-                id = 1,
-                maxlvl = 5,
-                name = "ФЫВФЫв",
-                url = "https://imgur.com/m4m8g0t.png"
-            });
-            _upgrades.Add(1, new UpgradesInfo
-            {
-                addcoin = 0.001,
-                cost = 0.1,
-                id = 2,
-                maxlvl = 5,
-                name = "zalupa",
-                url = "https://imgur.com/m4m8g0t.png"
-            });
-            _upgrades.Add(2, new UpgradesInfo
-            {
-                addcoin = 0.001,
-                cost = 0.1,
-                id = 3,
-                maxlvl = 5,
-                name = "govno",
-                url = "https://imgur.com/m4m8g0t.png"
-            });
 
-            ///TEST//\/\/\//\/\/\/\/\/\/\//\/\//\/\/\/\/\
-            
-            
-            
-            
-            string main_back = "https://imgur.com/gxOM6f8.png";
-            ImageLibrary.Call("AddImage", main_back, main_back); //main_background
-            string main_border = "https://imgur.com/WvsSWHB.png";
-            ImageLibrary.Call("AddImage", main_border, main_border); //main_border
-            string main_tap = "https://imgur.com/mnFRlYZ.png";
-            ImageLibrary.Call("AddImage", main_tap, main_tap); //main_tap
-            string main_balance = "https://imgur.com/lqwgcN9.png";
-            ImageLibrary.Call("AddImage", main_balance, main_balance); //main_balik
-            string main_buttons = "https://imgur.com/EMHab4A.png";
-            ImageLibrary.Call("AddImage", main_buttons, main_buttons); //main_buttons
-            string main_phone = "https://imgur.com/PDwzpbG.png";
-            ImageLibrary.Call("AddImage", main_phone, main_phone); //main_phone
-            string main_upgrades = "https://imgur.com/5jqO4BC.png";
-            ImageLibrary.Call("AddImage", main_upgrades, main_upgrades); //main_upgrades
-            string upgrade_backimage = "https://imgur.com/7MFgOuM.png";
-            ImageLibrary.Call("AddImage", upgrade_backimage, upgrade_backimage); //upgrade_backimage
-
-            foreach (var info in _upgrades)
-            {
-                ImageLibrary.Call("AddImage", info.Value.url, info.Value.url);
-            }
-            
-            
             CuiElementContainer main = new CuiElementContainer();
             CuiElementContainer main_balance_gui = new CuiElementContainer();
-            CuiElementContainer upgrades = new CuiElementContainer();
+            
 
             main.Add(new CuiButton
             {
@@ -404,6 +365,21 @@ namespace Oxide.Plugins
                 }
             }, "balance", "balance_amount");
             //////////////////UPGRADES//////////////////UPGRADES/////////UPGRADES///////////////UPGRADES/////////////UPGRADES////////////////////////UPGRADES
+            
+            
+            main_json = main.ToJson();
+            
+            upgrades_json = upgrades.ToJson();
+            
+            main_balance_gui_json = main_balance_gui.ToJson();
+        }
+
+        void GenerateUpgrades()
+        {
+            foreach (var info in _upgrades)
+            {
+                ImageLibrary.Call("AddImage", info.Value.url, info.Value.url);
+            }
             upgrades.Add(new CuiPanel
             {
                 RectTransform =
@@ -581,13 +557,6 @@ namespace Oxide.Plugins
                 }
                 
             },"Phone_upgrades");
-            
-            main_json = main.ToJson();
-            
-            upgrades_json = upgrades.ToJson();
-            
-            main_balance_gui_json = main_balance_gui.ToJson();
-            
         }
 
         [ChatCommand("rcoin")]
@@ -869,6 +838,7 @@ namespace Oxide.Plugins
                     if (!_upgrades.ContainsKey(upgradesInfo.id)) _upgrades.Add(upgradesInfo.id, upgradesInfo);
                     else _upgrades[upgradesInfo.id] = upgradesInfo;
                 }
+                GenerateUpgrades();
             }
 
             yield break;
