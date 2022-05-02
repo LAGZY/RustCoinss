@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Facepunch.Extend;
 using Newtonsoft.Json;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
@@ -21,6 +22,7 @@ namespace Oxide.Plugins
         private void OnPlayerConnected(BasePlayer player)
         {
             GetInfos(player);
+            GetTopPlayer(player);
         }
 
         private void OnPlayerDisconnected(BasePlayer player)
@@ -414,9 +416,8 @@ namespace Oxide.Plugins
                 }
             });
             int i = 0;
-            foreach (var x in _upgrades)
+            foreach (var x in _upgrades.Where(x => x.Value.isvisible))
             {
-                
                 upgrades.Add(new CuiElement
                 {
                     Parent = "Upgrades",
@@ -564,6 +565,7 @@ namespace Oxide.Plugins
         void OpenMenu(BasePlayer player)
         {
             DataPlayer t;
+            
             if (!_players.TryGetValue(player, out t)) return;
             
             CommunityEntity.ServerInstance.ClientRPCEx(
@@ -576,7 +578,7 @@ namespace Oxide.Plugins
                 .Replace("[NICKNAME]", player.displayName)
                 .Replace("[ID]", t.id.ToString("0000"))
                 .Replace("[BALANCE]", t.coins.ToString("0.000"))
-                .Replace("[TOP_POSITION]", "00001");
+                .Replace("[TOP_POSITION]", _top[player]);
 
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "AddUI", jsonSend);
@@ -708,6 +710,12 @@ namespace Oxide.Plugins
                 (code, response) => ServerMgr.Instance.StartCoroutine(GetInfo(player, code, response)), this,
                 Core.Libraries.RequestMethod.POST);
         }
+        private void GetTopPlayer(BasePlayer player)
+        {
+            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"steamid={player.userID}",
+                (code, response) => ServerMgr.Instance.StartCoroutine(TopPlayer(player, code, response)), this,
+                Core.Libraries.RequestMethod.POST);
+        }
 
         private IEnumerator UpdateMysql()
         {
@@ -718,6 +726,7 @@ namespace Oxide.Plugins
                 ServerUpdate();
                 foreach (var player in _players)
                 {
+                    GetTopPlayer(player.Key);
                     double add = player.Value.upgrades.Sum(p =>
                     {
                         var t = 0.0;
@@ -735,6 +744,7 @@ namespace Oxide.Plugins
                     player.Value.serverid = serverId;
                     coins += add;
                     Update(player.Key, player.Value.coins, player.Value.serverid, player.Value.upgrades);
+                    
                 }
             }
 
@@ -789,6 +799,19 @@ namespace Oxide.Plugins
             if (response == null) yield break;
             if (code == 200)
             {
+                yield return CoroutineEx.waitForSeconds(2f);
+            }
+
+            yield break;
+        }
+
+        private Dictionary<BasePlayer, string> _top = new Dictionary<BasePlayer, string>();
+        IEnumerator TopPlayer(BasePlayer player, int code, string response)
+        {
+            if (response == null) yield break;
+            if (code == 200)
+            {
+                _top[player] = response;
                 yield return CoroutineEx.waitForSeconds(2f);
             }
 
