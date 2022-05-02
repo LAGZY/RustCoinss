@@ -370,9 +370,7 @@ namespace Oxide.Plugins
             
             
             main_json = main.ToJson();
-            
-            upgrades_json = upgrades.ToJson();
-            
+
             main_balance_gui_json = main_balance_gui.ToJson();
         }
 
@@ -516,7 +514,7 @@ namespace Oxide.Plugins
                     },
                     Text =
                     {
-                        Text = x.Value.maxlvl.ToString(),
+                        Text = $"[PLAYER_LEVEL{i}]",
                         Align = TextAnchor.MiddleCenter,
                         FontSize = 10
                     }
@@ -545,10 +543,10 @@ namespace Oxide.Plugins
             {
                 RectTransform =
                 {
-                    AnchorMin = "0.5 0.5",
-                    AnchorMax = "0.5 0.5",
-                    OffsetMin = "-95 -40",
-                    OffsetMax = "-50 -5"
+                    AnchorMin = "0 1",
+                    AnchorMax = "0 1",
+                    OffsetMin = "30 -35",
+                    OffsetMax = "70 -10"
                 },
                 Text = { Text = ""},
                 Button =
@@ -559,6 +557,8 @@ namespace Oxide.Plugins
                 
             },"Phone_upgrades");
             upgrades_json = upgrades.ToJson();
+            
+            
         }
 
         [ChatCommand("rcoin")]
@@ -571,14 +571,14 @@ namespace Oxide.Plugins
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "closebutton");
 
-
+            var top = _top[player].ToInt();
             var avatar = GetImage(player.UserIDString);
             string jsonSend = main_json
                 .Replace("[MAIN_AVATAR]", avatar)
                 .Replace("[NICKNAME]", player.displayName)
                 .Replace("[ID]", t.id.ToString("0000"))
                 .Replace("[BALANCE]", t.coins.ToString("0.000"))
-                .Replace("[TOP_POSITION]", _top[player]);
+                .Replace("[TOP_POSITION]", top.ToString("0000"));
 
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "AddUI", jsonSend);
@@ -600,6 +600,7 @@ namespace Oxide.Plugins
 
         private string GetImage(string shortname, ulong skin = 0) =>
             (string) ImageLibrary.Call("GetImage", shortname, skin);
+        
 
         void Commands(IPlayer user, string command, string[] args)
         {
@@ -630,7 +631,25 @@ namespace Oxide.Plugins
                     {
                         case "UPGRADES":
                         {
-                            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", upgrades_json);
+                            string sendupgardes = upgrades_json;
+                            DataPlayer t;
+                            if(!_players.TryGetValue(player, out t)) return;
+                            int i = 0;
+                            foreach (var info in _upgrades)
+                            {
+                                if (t.upgrades.ContainsKey(info.Key))
+                                {
+                                    sendupgardes = sendupgardes.Replace($"[PLAYER_LEVEL{i}]", t.upgrades[info.Key].ToString());
+                                }
+                                else
+                                {
+                                    sendupgardes = sendupgardes.Replace($"[PLAYER_LEVEL{i}]", "0");
+                                }
+
+                                i++;
+                            }
+                            
+                            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", sendupgardes);
                             
                             break;
                         }
@@ -812,6 +831,7 @@ namespace Oxide.Plugins
             if (code == 200)
             {
                 _top[player] = response;
+                Puts(response);
                 yield return CoroutineEx.waitForSeconds(2f);
             }
 
