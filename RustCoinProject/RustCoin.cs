@@ -557,6 +557,7 @@ namespace Oxide.Plugins
                 }
                 
             },"Phone_upgrades");
+            upgrades_json = upgrades.ToJson();
         }
 
         [ChatCommand("rcoin")]
