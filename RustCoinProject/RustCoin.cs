@@ -49,8 +49,17 @@ namespace Oxide.Plugins
         public string main_phone = "https://imgur.com/PDwzpbG.png";
         public string main_upgrades = "https://imgur.com/5jqO4BC.png";
         public string upgrade_backimage = "https://imgur.com/7MFgOuM.png";
+
         private void OnServerInitialized()
         {
+            SetServer();
+            ServerMgr.Instance.StartCoroutine(UpdateMysql());
+
+            foreach (var basePlayer in BasePlayer.activePlayerList)
+            {
+                OnPlayerConnected(basePlayer);
+            }
+
             if (!ImageLibrary)
             {
                 Debug.LogError("ImageLibrary не установлена!!! Плагин работать не будет!!");
@@ -59,13 +68,7 @@ namespace Oxide.Plugins
 
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
             Generate();
-            SetServer();
-            ServerMgr.Instance.StartCoroutine(UpdateMysql());
-
-            foreach (var basePlayer in BasePlayer.activePlayerList)
-            {
-                OnPlayerConnected(basePlayer);
-            }
+            
             
             ImageLibrary.Call("AddImage", main_back, main_back); //main_background
             ImageLibrary.Call("AddImage", main_border, main_border); //main_border
@@ -424,6 +427,10 @@ namespace Oxide.Plugins
                 Name = "Upgrade_plate",
                 Components =
                 {
+                    new CuiRawImageComponent
+                    {
+                        Color = "0, 0, 0, 0"
+                    },
                     new CuiRectTransformComponent
                     {
                         AnchorMin = "0 0",
@@ -606,6 +613,7 @@ namespace Oxide.Plugins
             },"Phone_upgrades");
             
             upgrades_json = upgrades_main.ToJson();
+            upgrade_plate_json = upgrade_plate.ToJson();
             upgarde_slot_json = upgrade_slot.ToJson();
 
 
@@ -620,15 +628,17 @@ namespace Oxide.Plugins
             
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "closebutton");
-
-            var top = _top[player].ToInt();
+            string top;
+            if (!_top.TryGetValue(player, out top)) top = "0";
+            
             var avatar = GetImage(player.UserIDString);
             string jsonSend = main_json
                 .Replace("[MAIN_AVATAR]", avatar)
                 .Replace("[NICKNAME]", player.displayName)
                 .Replace("[ID]", t.id.ToString("0000"))
                 .Replace("[BALANCE]", t.coins.ToString("0.000"))
-                .Replace("[TOP_POSITION]", top.ToString("0000"));
+                .Replace("[TOP_POSITION]", top);
+            
 
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "AddUI", jsonSend);
@@ -699,8 +709,9 @@ namespace Oxide.Plugins
                                     .Replace("[NAME]", x.Value.name)
                                     .Replace("[HOWADD]", x.Value.addcoin.ToString("0.000"))
                                     .Replace("[COST]", x.Value.cost.ToString("0.000"))
-                                    .Replace("[PLAYER_LEVEL]", t.upgrades[x.Value.id].ToString())
+                                    .Replace("[PLAYER_LEVEL]", t.upgrades.ContainsKey(x.Value.id) ? t.upgrades[x.Value.id].ToString() : "0")
                                 );
+                                player.ChatMessage($"{-115 - (48 * i)}");
                                 i++;
                             }
                             
@@ -791,7 +802,7 @@ namespace Oxide.Plugins
         {
             webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/update.php",
                 $"steamid={player.userID}&name={Uri.EscapeDataString(player.displayName)}&coins={coin}&serverid={serverid}&upgrades={JsonConvert.SerializeObject(upgrades)}",
-                (code2, response2) => ServerMgr.Instance.StartCoroutine(UpdateInfo(player, code2, response2)), this,
+                (code2, response2) => { }, this,
                 Core.Libraries.RequestMethod.POST);
         }
 
@@ -814,6 +825,7 @@ namespace Oxide.Plugins
             {
                 Upgrades();
                 yield return CoroutineEx.waitForSeconds(10f);
+                if(!IsLoaded) yield break;
                 ServerUpdate();
                 foreach (var player in _players)
                 {
@@ -885,26 +897,19 @@ namespace Oxide.Plugins
             public bool isvisible;
         }
 
-        IEnumerator UpdateInfo(BasePlayer player, int code, string response)
-        {
-            if (response == null) yield break;
-            if (code == 200)
-            {
-                yield return CoroutineEx.waitForSeconds(2f);
-            }
-
-            yield break;
-        }
+       
 
         private Dictionary<BasePlayer, string> _top = new Dictionary<BasePlayer, string>();
         IEnumerator TopPlayer(BasePlayer player, int code, string response)
         {
+            
+            if(!IsLoaded) yield break;
             if (response == null) yield break;
             if (code == 200)
             {
+                if(player == null || _top == null) yield break;
                 _top[player] = response;
-                Puts(response);
-                yield return CoroutineEx.waitForSeconds(2f);
+                yield break;
             }
 
             yield break;
@@ -918,6 +923,7 @@ namespace Oxide.Plugins
 
         IEnumerator ServerUpdates(int code, string response)
         {
+            if(!IsLoaded) yield break;
             if (response == null) yield break;
             if (code == 200)
             {
@@ -925,6 +931,7 @@ namespace Oxide.Plugins
                 {
                     ServerUpdate();
                     yield return CoroutineEx.waitForSeconds(2f);
+                    if(!IsLoaded) yield break;
                     SetServer();
                     yield break;
                 }
@@ -939,6 +946,7 @@ namespace Oxide.Plugins
 
         IEnumerator UpInfo(int code, string response)
         {
+            if(!IsLoaded) yield break;
             if (response == null) yield break;
             if (code == 200)
             {
@@ -962,6 +970,8 @@ namespace Oxide.Plugins
 
         IEnumerator GetInfo(BasePlayer player, int code, string response)
         {
+            if(!IsLoaded) yield break;
+            
             if (response == null) yield break;
             if (code == 200)
             {
@@ -969,6 +979,7 @@ namespace Oxide.Plugins
                 {
                     Update(player, 0, serverId, new Dictionary<int, int>());
                     yield return CoroutineEx.waitForSeconds(2f);
+                    if(!IsLoaded) yield break;
                     GetInfos(player);
                     yield break;
                 }
