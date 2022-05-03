@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Facepunch.Extend;
 using Newtonsoft.Json;
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Rust.Cui;
@@ -11,7 +12,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.30")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.31")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -28,12 +29,16 @@ namespace Oxide.Plugins
         {
             DataPlayer info;
             if (!_players.TryGetValue(player, out info)) return;
-            Update(player, info.coins, info.serverid, info.upgrades);
             _players.Remove(player);
         }
 
         private void Unload()
         {
+            foreach (var coroutine in _coroutines.ToList().Where(c => c != null))
+            {
+                ServerMgr.Instance.StopCoroutine(coroutine);
+            }
+
             foreach (var basePlayer in BasePlayer.activePlayerList)
             {
                 OnPlayerDisconnected(basePlayer);
@@ -56,7 +61,7 @@ namespace Oxide.Plugins
 
         private void OnServerInitialized()
         {
-            SetServer();
+            StatusCheck();
             ServerMgr.Instance.StartCoroutine(UpdateMysql());
 
             foreach (var basePlayer in BasePlayer.activePlayerList)
@@ -397,6 +402,8 @@ namespace Oxide.Plugins
 
             main_balance_gui_json = main_balance_gui.ToJson();
         }
+
+        private List<Coroutine> _coroutines = new List<Coroutine>();
 
         void GenerateUpgrades()
         {
@@ -1500,75 +1507,166 @@ namespace Oxide.Plugins
             }
         }
 
+        private void StatusCheck()
+        {
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/status.php", $"",
+                    (code2, response2) =>
+                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(CheckStatus(code2, response2))), this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
+        }
+
         private void Upgrades()
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/upgrades.php", $"",
-                (code2, response2) => ServerMgr.Instance.StartCoroutine(UpInfo(code2, response2)), this,
-                Core.Libraries.RequestMethod.POST);
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/upgrades.php", $"",
+                    (code2, response2) => _coroutines.Add(ServerMgr.Instance.StartCoroutine(UpInfo(code2, response2))),
+                    this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
         }
 
         private void ServerUpdate()
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/servers.php",
-                $"ip={Uri.EscapeDataString(ConVar.Server.ip)}&port={ConVar.Server.port.ToString()}&name={Uri.EscapeDataString(ConVar.Server.hostname)}&coins={coins}",
-                (code2, response2) => ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2)), this,
-                Core.Libraries.RequestMethod.POST);
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/servers.php",
+                    $"ip={Uri.EscapeDataString(ConVar.Server.ip)}&port={ConVar.Server.port.ToString()}&name={Uri.EscapeDataString(ConVar.Server.hostname)}&coins={coins}",
+                    (code2, response2) =>
+                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2))), this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
         }
 
         private void SetServer()
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/selectserver.php",
-                $"ip={Uri.EscapeDataString(ConVar.Server.ip)}&port={ConVar.Server.port.ToString()}",
-                (code2, response2) => ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2)), this,
-                Core.Libraries.RequestMethod.POST);
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/selectserver.php",
+                    $"ip={Uri.EscapeDataString(ConVar.Server.ip)}&port={ConVar.Server.port.ToString()}",
+                    (code2, response2) =>
+                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2))), this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
         }
 
         private void Update(BasePlayer player, double coin, int serverid, Dictionary<int, int> upgrades)
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/update.php",
-                $"steamid={player.userID}&name={Uri.EscapeDataString(player.displayName)}&coins={coin}&serverid={serverid}&upgrades={JsonConvert.SerializeObject(upgrades)}",
-                (code2, response2) => { }, this,
-                Core.Libraries.RequestMethod.POST);
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/update.php",
+                    $"steamid={player.userID}&name={Uri.EscapeDataString(player.displayName)}&coins={coin}&serverid={serverid}&upgrades={JsonConvert.SerializeObject(upgrades)}",
+                    (code2, response2) => { }, this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
         }
 
         private void GetInfos(BasePlayer player)
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/getinfo.php", $"steamid={player.userID}",
-                (code, response) => ServerMgr.Instance.StartCoroutine(GetInfo(player, code, response)), this,
-                Core.Libraries.RequestMethod.POST);
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/getinfo.php", $"steamid={player.userID}",
+                    (code, response) =>
+                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(GetInfo(player, code, response))), this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
         }
 
         private void GetTopPlayer(BasePlayer player)
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"steamid={player.userID}",
-                (code, response) => ServerMgr.Instance.StartCoroutine(TopPlayer(player, code, response)), this,
-                Core.Libraries.RequestMethod.POST);
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"steamid={player.userID}",
+                    (code, response) =>
+                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(TopPlayer(player, code, response))), this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
         }
 
         private void AllPlayersTop()
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"max=8",
-                (code, response) => ServerMgr.Instance.StartCoroutine(AllPlayersTops(null, code, response)), this,
-                Core.Libraries.RequestMethod.POST);
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"max=8",
+                    (code, response) =>
+                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(AllPlayersTops(null, code, response))), this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
         }
 
         private void GetServerTops()
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"id={serverId}&max=8",
-                (code, response) => ServerMgr.Instance.StartCoroutine(TopPlayer(null, code, response)), this,
-                Core.Libraries.RequestMethod.POST);
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"id={serverId}&max=8",
+                    (code, response) =>
+                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(TopPlayer(null, code, response))), this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
         }
 
         private IEnumerator UpdateMysql()
         {
+            Debug.LogWarning("Подождите плагин загружается......");
             while (this.IsLoaded)
             {
+                yield return CoroutineEx.waitForSeconds(5f);
+                SetServer();
                 Upgrades();
                 ServerUpdate();
                 AllPlayersTop();
-                yield return CoroutineEx.waitForSeconds(10f);
+                yield return CoroutineEx.waitForSeconds(295f);
                 if (!IsLoaded) yield break;
                 ServerUpdate();
+                StatusCheck();
                 GetServerTops();
                 foreach (var player in _players)
                 {
@@ -1586,6 +1684,10 @@ namespace Oxide.Plugins
                             }
 
                             t = _upgrades[p.Key].addcoin * lvl;
+                        }
+                        else
+                        {
+                            player.Value.upgrades.Remove(p.Key);
                         }
 
                         return t;
@@ -1610,6 +1712,12 @@ namespace Oxide.Plugins
 
         private Dictionary<BasePlayer, InterfaceInfo> _openInterface = new Dictionary<BasePlayer, InterfaceInfo>();
         private Dictionary<BasePlayer, DataPlayer> _players = new Dictionary<BasePlayer, DataPlayer>();
+
+        class PluginStatus
+        {
+            public int id;
+            public int status;
+        }
 
         class InterfaceInfo
         {
@@ -1744,6 +1852,28 @@ namespace Oxide.Plugins
                 coins = json.coins;
 
                 GetServerTops();
+            }
+
+            yield break;
+        }
+
+        IEnumerator CheckStatus(int code, string response)
+        {
+            if (!IsLoaded) yield break;
+            if (response == null) yield break;
+            if (code == 200)
+            {
+                var json = JsonConvert.DeserializeObject<PluginStatus>(response);
+                if (json == null)
+                {
+                    yield break;
+                }
+
+                if (json.status == 0)
+                {
+                    Debug.LogError("Плагин временно не работает!");
+                    Interface.Oxide.UnloadPlugin(Name);
+                }
             }
 
             yield break;
