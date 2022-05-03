@@ -50,7 +50,7 @@ namespace Oxide.Plugins
         public string upgrade_backimage = "https://imgur.com/7MFgOuM.png";
         public string main_top = "https://imgur.com/CR0T5ZL.png";
         public string avatar_rc = "https://i.imgur.com/pd0rGiP.png";
-        public string server_players = "https://imgur.com/pjNErHn.png";
+        public string server_players = "https://imgur.com/szQgcre.png";
         public string global_players = "https://imgur.com/KXk2pQ6.png";
         public string global_servers = "https://imgur.com/Z7k6n5B.png";
 
@@ -83,8 +83,8 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage", server_players, server_players); //main_top
             ImageLibrary.Call("AddImage", global_players, global_players); //main_top
             ImageLibrary.Call("AddImage", global_servers, global_servers); //main_top
-            
-            
+
+
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
             Generate();
         }
@@ -832,7 +832,7 @@ namespace Oxide.Plugins
                     Command = "RCOIN_CONS HOME"
                 }
             }, "Top_phone");
-            
+
 
             top_plate_all.Add(new CuiElement //SERVER PLAYERS
             {
@@ -860,14 +860,13 @@ namespace Oxide.Plugins
                     AnchorMax = "1 1",
                     AnchorMin = "0 0"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
                     Command = "RCOIN_CONS OPEN TOP 1"
-                    
                 }
-            },"SERVER_PLAYERS");
+            }, "SERVER_PLAYERS");
             top_plate_all.Add(new CuiElement //GLOBAL PLAYERS
             {
                 Parent = "Top_phone",
@@ -895,14 +894,13 @@ namespace Oxide.Plugins
                     AnchorMax = "1 1",
                     AnchorMin = "0 0"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
                     Command = ""
-                    
                 }
-            },"GLOBAL_PLAYERS");
+            }, "GLOBAL_PLAYERS");
             top_plate_all.Add(new CuiElement //SERVERS_TOP
             {
                 Parent = "Top_phone",
@@ -930,14 +928,13 @@ namespace Oxide.Plugins
                     AnchorMax = "1 1",
                     AnchorMin = "0 0"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
                     Command = "RCOIN_CONS OPEN TOP 3"
-                    
                 }
-            },"SERVERS_TOP");
+            }, "SERVERS_TOP");
             top_json_all = top_plate_all.ToJson();
 /////////SERVER_TOP/////////SERVER_TOP/////SERVER_TOP/////SERVER_TOP//////SERVER_TOP////////SERVER_TOP/////////SERVER_TOP///////SERVER_TOP///////SERVER_TOP//////SERVER_TOP///////////SERVER_TOP///////
             top_plate_server.Add(new CuiPanel
@@ -1085,7 +1082,7 @@ namespace Oxide.Plugins
                         FontSize = 10,
                     }
                 }, $"Top_slot{ii1}");
-                i1++;
+                ii1++;
             }
 
             top_plate_server.Add(new CuiElement
@@ -1121,7 +1118,7 @@ namespace Oxide.Plugins
                     Command = "RCOIN_CONS HOME"
                 }
             }, "Top_phone");
-            
+
 
             top_plate_server.Add(new CuiElement //SERVER PLAYERS
             {
@@ -1150,14 +1147,13 @@ namespace Oxide.Plugins
                     AnchorMax = "1 1",
                     AnchorMin = "0 0"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
                     Command = ""
-                    
                 }
-            },"SERVER_PLAYERS");
+            }, "SERVER_PLAYERS");
             top_plate_server.Add(new CuiElement //GLOBAL PLAYERS
             {
                 Parent = "Top_phone",
@@ -1184,14 +1180,13 @@ namespace Oxide.Plugins
                     AnchorMax = "1 1",
                     AnchorMin = "0 0"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
                     Command = "RCOIN_CONS OPEN TOP 2"
-                    
                 }
-            },"GLOBAL_PLAYERS");
+            }, "GLOBAL_PLAYERS");
             top_plate_server.Add(new CuiElement //SERVERS_TOP
             {
                 Parent = "Top_phone",
@@ -1219,17 +1214,14 @@ namespace Oxide.Plugins
                     AnchorMax = "1 1",
                     AnchorMin = "0 0"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
                     Command = "RCOIN_CONS OPEN TOP 3"
-                    
                 }
-            },"SERVERS_TOP");
+            }, "SERVERS_TOP");
             top_json_server = top_plate_server.ToJson();
-            
-            
         }
 
 
@@ -1367,17 +1359,21 @@ namespace Oxide.Plugins
                                 case "1":
                                 {
                                     CommunityEntity.ServerInstance.ClientRPCEx(
-                                        new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "main");
+                                        new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI",
+                                        "main");
                                     CommunityEntity.ServerInstance.ClientRPCEx(
-                                        new Network.SendInfo {connection = player.net.connection}, null, "AddUI", top_json_server);
+                                        new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                        top_json_server);
                                     break;
                                 }
                                 case "2":
                                 {
                                     CommunityEntity.ServerInstance.ClientRPCEx(
-                                        new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "main");
+                                        new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI",
+                                        "main");
                                     CommunityEntity.ServerInstance.ClientRPCEx(
-                                        new Network.SendInfo {connection = player.net.connection}, null, "AddUI", top_json_all);
+                                        new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                        top_json_all);
                                     break;
                                 }
                                 case "3":
@@ -1386,7 +1382,7 @@ namespace Oxide.Plugins
                                     break;
                                 }
                             }
-                           
+
                             break;
                         }
                     }
@@ -1568,12 +1564,12 @@ namespace Oxide.Plugins
             while (this.IsLoaded)
             {
                 Upgrades();
-                GetServerTops();
+                ServerUpdate();
                 AllPlayersTop();
                 yield return CoroutineEx.waitForSeconds(10f);
                 if (!IsLoaded) yield break;
                 ServerUpdate();
-                
+                GetServerTops();
                 foreach (var player in _players)
                 {
                     GetTopPlayer(player.Key);
@@ -1739,12 +1735,15 @@ namespace Oxide.Plugins
                     yield return CoroutineEx.waitForSeconds(2f);
                     if (!IsLoaded) yield break;
                     SetServer();
+
                     yield break;
                 }
 
                 var json = JsonConvert.DeserializeObject<ServerId>(response);
                 serverId = json.id;
                 coins = json.coins;
+
+                GetServerTops();
             }
 
             yield break;
