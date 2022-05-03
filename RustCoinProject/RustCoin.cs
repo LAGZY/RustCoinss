@@ -49,7 +49,7 @@ namespace Oxide.Plugins
         public string main_upgrades = "https://imgur.com/5jqO4BC.png";
         public string upgrade_backimage = "https://imgur.com/7MFgOuM.png";
         public string main_top = "https://imgur.com/CR0T5ZL.png";
-        
+        public string avatar_rc = "https://i.imgur.com/pd0rGiP.png";
 
         private void OnServerInitialized()
         {
@@ -80,7 +80,7 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage", main_upgrades, main_upgrades); //main_upgrades
             ImageLibrary.Call("AddImage", upgrade_backimage, upgrade_backimage); //upgrade_backimage
             ImageLibrary.Call("AddImage", main_top, main_top); //main_top
-
+            ImageLibrary.Call("AddImage", avatar_rc, avatar_rc); //main_top
         }
 
         #endregion
@@ -659,27 +659,52 @@ namespace Oxide.Plugins
             }, "closebutton", "Top_plate");
             int i = 0;
             foreach (var x in _topServer)
-            { 
+            {
                 ImageLibrary.Call("GetPlayerAvatar", x.steamid.ToString());
                 top_plate.Add(new CuiElement
                 {
-                Parent = "Top_plate",
-                Components =
-                {
-                    new CuiRawImageComponent
+                    Parent = "Top_plate",
+                    Components =
                     {
-                        Png = GetImage(x.steamid.ToString())
-                    },
-                    new CuiRectTransformComponent
-                    {
-                        AnchorMin = "0 1",
-                        AnchorMax = "0 1",
-                        OffsetMin = $"30 {-109 - (35 * i)}",
-                        OffsetMax = $"64 {-74 -(35 * i)}"
+                        new CuiRawImageComponent
+                        {
+                            Png = GetImage(x.steamid.ToString())
+                        },
+                        new CuiRectTransformComponent
+                        {
+                            AnchorMin = "0 1",
+                            AnchorMax = "0 1",
+                            OffsetMin = $"30 {-109 - (35 * i)}",
+                            OffsetMax = $"64 {-74 - (35 * i)}"
+                        }
                     }
-                }
                 });
                 i++;
+            }
+
+            if (i < 8)
+            {
+                for (int j = i; i == 8; j++)
+                {
+                    top_plate.Add(new CuiElement
+                    {
+                        Parent = "Top_plate",
+                        Components =
+                        {
+                            new CuiRawImageComponent
+                            {
+                                Png = GetImage(avatar_rc)
+                            },
+                            new CuiRectTransformComponent
+                            {
+                                AnchorMin = "0 1",
+                                AnchorMax = "0 1",
+                                OffsetMin = $"30 {-109 - (35 * j)}",
+                                OffsetMax = $"64 {-74 - (35 * j)}"
+                            }
+                        }
+                    });
+                }
             }
 
             top_plate.Add(new CuiElement
@@ -704,15 +729,15 @@ namespace Oxide.Plugins
             {
                 top_plate.Add(new CuiPanel
                 {
-                RectTransform =
-                {
-                    AnchorMin = "0.5 1",
-                    AnchorMax = "0.5 1",
-                    OffsetMin = $"-85 {-110 - (35 * i1)}",
-                    OffsetMax = $"85 {-75 - (35 * i1)}"
-                },
-                Image = {Color = "0, 0, 0, 0"}
-                },"Top_main", $"Top_slot{i1}");
+                    RectTransform =
+                    {
+                        AnchorMin = "0.5 1",
+                        AnchorMax = "0.5 1",
+                        OffsetMin = $"-85 {-110 - (35 * i1)}",
+                        OffsetMax = $"85 {-75 - (35 * i1)}"
+                    },
+                    Image = {Color = "0, 0, 0, 0"}
+                }, "Top_main", $"Top_slot{i1}");
                 top_plate.Add(new CuiLabel
                 {
                     RectTransform =
@@ -728,7 +753,7 @@ namespace Oxide.Plugins
                         Align = TextAnchor.UpperLeft,
                         FontSize = 10,
                     }
-                },$"Top_slot{i1}");
+                }, $"Top_slot{i1}");
                 i++;
                 top_plate.Add(new CuiLabel
                 {
@@ -745,7 +770,7 @@ namespace Oxide.Plugins
                         Align = TextAnchor.MiddleCenter,
                         FontSize = 10,
                     }
-                },$"Top_slot{i1}");
+                }, $"Top_slot{i1}");
                 top_plate.Add(new CuiLabel
                 {
                     RectTransform =
@@ -761,9 +786,10 @@ namespace Oxide.Plugins
                         Align = TextAnchor.MiddleCenter,
                         FontSize = 10,
                     }
-                },$"Top_slot{i1}");
+                }, $"Top_slot{i1}");
                 i1++;
             }
+
             top_plate.Add(new CuiElement
             {
                 Parent = "Top_plate",
@@ -790,7 +816,7 @@ namespace Oxide.Plugins
                     OffsetMin = "20 -37",
                     OffsetMax = "70 -5"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
@@ -918,13 +944,13 @@ namespace Oxide.Plugins
                                 i++;
                             }
 
-                            
+
                             _openInterface[player] = new InterfaceInfo
                             {
                                 Interface = "upgrades",
                                 Page = page
                             };
-                            
+
 
                             break;
                         }
@@ -953,9 +979,10 @@ namespace Oxide.Plugins
 
                             if (t.upgrades.ContainsKey(x) && t.upgrades[x] + 1 > _upgrades[x].maxlvl)
                             {
-                                ReplySend(player,"Максимальный уровень достигнут!");
+                                ReplySend(player, "Максимальный уровень достигнут!");
                                 return;
                             }
+
                             int lvl = t.upgrades.ContainsKey(_upgrades[x].id) ? t.upgrades[_upgrades[x].id] : 0;
                             var image = GetImage(_upgrades[x].url);
                             CommunityEntity.ServerInstance.ClientRPCEx(
@@ -977,7 +1004,7 @@ namespace Oxide.Plugins
                                         .Replace("[PLAYER_LEVEL]", lvl.ToString())
                                         .Replace("[ID]", _upgrades[x].id.ToString())
                                 );
-                                ReplySend(player,"Недостаточно RC!!");
+                                ReplySend(player, "Недостаточно RC!!");
                                 return;
                             }
 
@@ -1016,9 +1043,10 @@ namespace Oxide.Plugins
 
         private int serverId = -1;
         private double coins = 0;
-        
+
         private void ReplySend(BasePlayer player, string message) => player.SendConsoleCommand("chat.add 0",
-            new object[2] {76561199239612154, $"{message} "});
+            new object[2] {76561199274772400, $"{message} "});
+
         private void AddMoney(BasePlayer player, double coin)
         {
             DataPlayer info;
@@ -1031,7 +1059,7 @@ namespace Oxide.Plugins
         {
             DataPlayer info;
             if (!_players.TryGetValue(player, out info)) return false;
-            if (info.coins - coin < 0.001) return false;
+            if (info.coins - coin < 0) return false;
             info.coins -= coin;
             return true;
         }
@@ -1094,6 +1122,13 @@ namespace Oxide.Plugins
                 Core.Libraries.RequestMethod.POST);
         }
 
+        private void AllPlayersTop()
+        {
+            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"max=8",
+                (code, response) => ServerMgr.Instance.StartCoroutine(AllPlayersTops(null, code, response)), this,
+                Core.Libraries.RequestMethod.POST);
+        }
+
         private void GetServerTops()
         {
             webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"id=3&max=8",
@@ -1132,7 +1167,9 @@ namespace Oxide.Plugins
                     if (_openInterface.ContainsKey(player.Key))
                     {
                         if (_openInterface[player.Key].Interface == "main") UpdateBalance(player.Key);
-                        else player.Key.SendConsoleCommand($"RCOIN_CONS OPEN UPGRADES {_openInterface[player.Key].Page}");
+                        else
+                            player.Key.SendConsoleCommand(
+                                $"RCOIN_CONS OPEN UPGRADES {_openInterface[player.Key].Page}");
                     }
 
                     player.Value.coins += add;
@@ -1204,8 +1241,34 @@ namespace Oxide.Plugins
             public double coins;
         }
 
+        private List<TopInfo> _topAllPlayers = new List<TopInfo>();
         private List<TopInfo> _topServer = new List<TopInfo>();
         private Dictionary<BasePlayer, string> _top = new Dictionary<BasePlayer, string>();
+
+        IEnumerator AllPlayersTops(BasePlayer player, int code, string response)
+        {
+            if (!IsLoaded) yield break;
+            if (response == null) yield break;
+            if (code == 200)
+            {
+                int top;
+                if (int.TryParse(response, out top)) _top[player] = response;
+                else
+                {
+                    var json = JsonConvert.DeserializeObject<Dictionary<int, TopInfo>>(response);
+                    _topAllPlayers.Clear();
+                    foreach (var keyValuePair in json)
+                    {
+                        _topAllPlayers.Add(keyValuePair.Value);
+                    }
+                    //GenerateTop();
+                }
+
+                yield break;
+            }
+
+            yield break;
+        }
 
         IEnumerator TopPlayer(BasePlayer player, int code, string response)
         {
@@ -1223,6 +1286,7 @@ namespace Oxide.Plugins
                     {
                         _topServer.Add(keyValuePair.Value);
                     }
+
                     GenerateTop();
                 }
 
@@ -1256,9 +1320,8 @@ namespace Oxide.Plugins
                 var json = JsonConvert.DeserializeObject<ServerId>(response);
                 serverId = json.id;
                 coins = json.coins;
-
                 GetServerTops();
-                
+                AllPlayersTop();
             }
 
             yield break;
