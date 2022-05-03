@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.32")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.37")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -22,13 +22,13 @@ namespace Oxide.Plugins
         private void OnPlayerConnected(BasePlayer player)
         {
             GetInfos(player);
-            GetTopPlayer(player);
         }
 
         private void OnPlayerDisconnected(BasePlayer player)
         {
             DataPlayer info;
             if (!_players.TryGetValue(player, out info)) return;
+            Update(player, info.coins, info.serverid, info.upgrades);
             _players.Remove(player);
         }
 
@@ -79,11 +79,6 @@ namespace Oxide.Plugins
         {
             StatusCheck();
             start = ServerMgr.Instance.StartCoroutine(UpdateMysql());
-
-            foreach (var basePlayer in BasePlayer.activePlayerList)
-            {
-                OnPlayerConnected(basePlayer);
-            }
 
             if (!ImageLibrary)
             {
@@ -545,7 +540,7 @@ namespace Oxide.Plugins
                 },
                 Text =
                 {
-                    Text = "[HOWADD]" + "RC/5m",
+                    Text = "[HOWADD]" + "RC/1m",
                     Align = TextAnchor.MiddleCenter,
                     FontSize = 10,
                     Color = "0, 1, 0, 1"
@@ -1358,7 +1353,7 @@ namespace Oxide.Plugins
                                         .Replace("[IMAGE]", image)
                                         .Replace("[NAME]", x.Value.name)
                                         .Replace("[HOWADD]", (x.Value.addcoin * (lvl + 1)).ToString("0.000"))
-                                        .Replace("[COST]", (x.Value.cost * Math.Pow(1.15, lvl + 1)).ToString("0.000"))
+                                        .Replace("[COST]", (x.Value.cost * Math.Pow(1.15, lvl)).ToString("0.000"))
                                         .Replace("[PLAYER_LEVEL]", lvl.ToString())
                                         .Replace("[ID]", x.Value.id.ToString())
                                 );
@@ -1680,16 +1675,20 @@ namespace Oxide.Plugins
             }
 
             SetServer();
+            yield return CoroutineEx.waitForSeconds(2f);
+            foreach (var basePlayer in BasePlayer.activePlayerList)
+            {
+                OnPlayerConnected(basePlayer);
+            }
+
             Debug.LogWarning("[RUST-COIN] Плагин успешно загружен!");
             while (this.IsLoaded)
             {
                 Upgrades();
-                AllPlayersTop();
-                yield return CoroutineEx.waitForSeconds(300f);
+                yield return CoroutineEx.waitForSeconds(60f);
                 if (!IsLoaded) yield break;
                 ServerUpdate();
                 StatusCheck();
-                GetServerTops();
                 foreach (var player in _players)
                 {
                     GetTopPlayer(player.Key);
@@ -1714,6 +1713,12 @@ namespace Oxide.Plugins
 
                         return t;
                     });
+
+
+                    player.Value.coins += add;
+                    player.Value.serverid = serverId;
+                    coins += add;
+                    Update(player.Key, player.Value.coins, player.Value.serverid, player.Value.upgrades);
                     if (_openInterface.ContainsKey(player.Key))
                     {
                         if (_openInterface[player.Key].Interface == "main") UpdateBalance(player.Key);
@@ -1721,12 +1726,10 @@ namespace Oxide.Plugins
                             player.Key.SendConsoleCommand(
                                 $"RCOIN_CONS OPEN UPGRADES {_openInterface[player.Key].Page}");
                     }
-
-                    player.Value.coins += add;
-                    player.Value.serverid = serverId;
-                    coins += add;
-                    Update(player.Key, player.Value.coins, player.Value.serverid, player.Value.upgrades);
                 }
+
+                AllPlayersTop();
+                GetServerTops();
             }
 
             yield break;
@@ -1807,7 +1810,9 @@ namespace Oxide.Plugins
             if (response == null) yield break;
             if (code == 200)
             {
+                if (!response.Contains("top")) yield break;
                 var json = JsonConvert.DeserializeObject<Dictionary<int, TopInfo>>(response);
+
                 _topAllPlayers.Clear();
                 foreach (var keyValuePair in json)
                 {
@@ -1831,6 +1836,7 @@ namespace Oxide.Plugins
                 if (int.TryParse(response, out top)) _top[player] = response;
                 else
                 {
+                    if (!response.Contains("top")) yield break;
                     var json = JsonConvert.DeserializeObject<Dictionary<int, TopInfo>>(response);
                     _topServer.Clear();
                     foreach (var keyValuePair in json)
@@ -1872,7 +1878,7 @@ namespace Oxide.Plugins
                 var json = JsonConvert.DeserializeObject<ServerId>(response);
                 serverId = json.id;
                 coins = json.coins;
-
+                AllPlayersTop();
                 GetServerTops();
             }
 
@@ -1975,6 +1981,7 @@ namespace Oxide.Plugins
                     serverid = json.serverid,
                     upgrades = JsonConvert.DeserializeObject<Dictionary<int, int>>(json.upgrades)
                 });
+                GetTopPlayer(player);
                 yield break;
             }
 
