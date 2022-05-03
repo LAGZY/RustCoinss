@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Facepunch.Extend;
 using Newtonsoft.Json;
@@ -12,7 +11,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.27")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.29")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -68,8 +67,8 @@ namespace Oxide.Plugins
 
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
             Generate();
-            
-            
+
+
             ImageLibrary.Call("AddImage", main_back, main_back); //main_background
             ImageLibrary.Call("AddImage", main_border, main_border); //main_border
             ImageLibrary.Call("AddImage", main_tap, main_tap); //main_tap
@@ -78,7 +77,7 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage", main_phone, main_phone); //main_phone
             ImageLibrary.Call("AddImage", main_upgrades, main_upgrades); //main_upgrades
             ImageLibrary.Call("AddImage", upgrade_backimage, upgrade_backimage); //upgrade_backimage
-    }
+        }
 
         #endregion
 
@@ -94,17 +93,13 @@ namespace Oxide.Plugins
         private string upgrade_plate_json;
         private string upgarde_slot_json;
 
-
-
         #endregion
 
         void Generate()
         {
-
-
             CuiElementContainer main = new CuiElementContainer();
             CuiElementContainer main_balance_gui = new CuiElementContainer();
-            
+
 
             main.Add(new CuiButton
             {
@@ -118,7 +113,7 @@ namespace Oxide.Plugins
                     Color = "0, 0, 0, 0",
                     Command = "RCOIN_CONS main_close",
                 },
-                Text = { Text = ""}
+                Text = {Text = ""}
             }, "Overlay", "closebutton");
 
             main.Add(new CuiPanel
@@ -226,7 +221,6 @@ namespace Oxide.Plugins
             }, "main");
             main.Add(new CuiLabel
             {
-                
                 RectTransform =
                 {
                     AnchorMin = "0.5 1",
@@ -336,7 +330,7 @@ namespace Oxide.Plugins
                 },
                 Text = {Text = ""}
             }, "Phone");
-            
+
             main.Add(new CuiButton
             {
                 RectTransform =
@@ -352,7 +346,7 @@ namespace Oxide.Plugins
                     Command = "RCOIN_CONS OPEN UPGRADES 0"
                 },
                 Text = {Text = ""}
-            },"Phone");
+            }, "Phone");
             main.Add(new CuiButton
             {
                 RectTransform =
@@ -368,7 +362,7 @@ namespace Oxide.Plugins
                     Command = "RCOIN_CONS OPEN TOP"
                 },
                 Text = {Text = ""}
-            },"Phone");
+            }, "Phone");
 
             main_balance_gui.Add(new CuiLabel
             {
@@ -385,9 +379,8 @@ namespace Oxide.Plugins
                     Align = TextAnchor.MiddleCenter,
                 }
             }, "balance", "balance_amount");
-            
-            
-            
+
+
             main_json = main.ToJson();
 
             main_balance_gui_json = main_balance_gui.ToJson();
@@ -402,6 +395,7 @@ namespace Oxide.Plugins
             {
                 ImageLibrary.Call("AddImage", info.Value.url, info.Value.url);
             }
+
             upgrades_main.Add(new CuiPanel
             {
                 RectTransform =
@@ -416,9 +410,8 @@ namespace Oxide.Plugins
                 {
                     Color = "0, 0, 0, 0"
                 }
-
             }, "closebutton", "Upgrades");
-            
+
             upgrades_main.Add(new CuiElement
             {
                 Parent = "Upgrades",
@@ -453,126 +446,124 @@ namespace Oxide.Plugins
                 }
             });
             upgrade_slot.Add(new CuiElement
+            {
+                Parent = "Upgrade_plate",
+                Name = $"Upgrade_slot[ENC]",
+                Components =
                 {
-                    Parent = "Upgrade_plate",
-                    Name = $"Upgrade_slot[ENC]",
-                    Components =
+                    new CuiRawImageComponent
                     {
-                        new CuiRawImageComponent
-                        {
-                            Png = ImageLibrary.Call<string>("GetImage", upgrade_backimage)
-                        },
-                        new CuiRectTransformComponent
-                        {
-                            AnchorMin = "0.5 1",
-                            AnchorMax = "0.5 1",
-                            OffsetMin = "[OMIN]",
-                            OffsetMax = "[OMAX]"
-                        }
+                        Png = ImageLibrary.Call<string>("GetImage", upgrade_backimage)
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 1",
+                        AnchorMax = "0.5 1",
+                        OffsetMin = "[OMIN]",
+                        OffsetMax = "[OMAX]"
                     }
-                });
+                }
+            });
             upgrade_slot.Add(new CuiElement
+            {
+                Parent = $"Upgrade_slot[ENC]",
+                Components =
                 {
-                    Parent = $"Upgrade_slot[ENC]",
-                    Components =
+                    new CuiRawImageComponent
                     {
-                        new CuiRawImageComponent
-                        {
-                            Png = "[IMAGE]"
-                        },
-                        new CuiRectTransformComponent
-                        {
-                            AnchorMin = "0.5 0.5",
-                            AnchorMax = "0.5 0.5",
-                            OffsetMin = "-80 -2",
-                            OffsetMax = "-60 18"
-                        }
-                    }
-                });
-            
-            upgrade_slot.Add(new CuiLabel //LABEL
-                {
-                    RectTransform =
+                        Png = "[IMAGE]"
+                    },
+                    new CuiRectTransformComponent
                     {
                         AnchorMin = "0.5 0.5",
                         AnchorMax = "0.5 0.5",
-                        OffsetMin = "-55 3",
-                        OffsetMax = "35 17"
-                    },
-                    Text =
-                    {
-                        Text = "[NAME]",
-                        Align = TextAnchor.MiddleLeft,
-                        FontSize = 12
+                        OffsetMin = "-80 -2",
+                        OffsetMax = "-60 18"
                     }
-                }, $"Upgrade_slot[ENC]");
-            upgrade_slot.Add(new CuiLabel //HOWADD
-                {
-                    RectTransform =
-                    {
-                        AnchorMin = "0.5 0.5",
-                        AnchorMax = "0.5 0.5",
-                        OffsetMin = "-75 -17",
-                        OffsetMax = "0 -5"
-                    },
-                    Text =
-                    {
-                        Text = "[HOWADD]" + "RC/5m",
-                        Align = TextAnchor.MiddleCenter,
-                        FontSize = 10,
-                        Color = "0, 1, 0, 1"
-                    }
-                }, $"Upgrade_slot[ENC]");
-            upgrade_slot.Add(new CuiLabel //COST
-                {
-                    RectTransform =
-                    {
-                        AnchorMin = "0.5 0.5",
-                        AnchorMax = "0.5 0.5",
-                        OffsetMin = "5 -16",
-                        OffsetMax = "63 -3"
-                    },
-                    Text =
-                    {
-                        Text = "[COST]",
-                        Align = TextAnchor.MiddleCenter,
-                        FontSize = 10,
+                }
+            });
 
-                    }
-                }, $"Upgrade_slot[ENC]");
-            upgrade_slot.Add(new CuiLabel //COUNT
+            upgrade_slot.Add(new CuiLabel //LABEL
+            {
+                RectTransform =
                 {
-                    RectTransform =
-                    {
-                        AnchorMin = "0.5 0.5",
-                        AnchorMax = "0.5 0.5",
-                        OffsetMin = "45 3",
-                        OffsetMax = "75 17"
-                    },
-                    Text =
-                    {
-                        Text = "[PLAYER_LEVEL]",
-                        Align = TextAnchor.MiddleCenter,
-                        FontSize = 10
-                    }
-                }, $"Upgrade_slot[ENC]");
+                    AnchorMin = "0.5 0.5",
+                    AnchorMax = "0.5 0.5",
+                    OffsetMin = "-55 3",
+                    OffsetMax = "35 17"
+                },
+                Text =
+                {
+                    Text = "[NAME]",
+                    Align = TextAnchor.MiddleLeft,
+                    FontSize = 12
+                }
+            }, $"Upgrade_slot[ENC]");
+            upgrade_slot.Add(new CuiLabel //HOWADD
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 0.5",
+                    AnchorMax = "0.5 0.5",
+                    OffsetMin = "-75 -17",
+                    OffsetMax = "0 -5"
+                },
+                Text =
+                {
+                    Text = "[HOWADD]" + "RC/5m",
+                    Align = TextAnchor.MiddleCenter,
+                    FontSize = 10,
+                    Color = "0, 1, 0, 1"
+                }
+            }, $"Upgrade_slot[ENC]");
+            upgrade_slot.Add(new CuiLabel //COST
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 0.5",
+                    AnchorMax = "0.5 0.5",
+                    OffsetMin = "5 -16",
+                    OffsetMax = "63 -3"
+                },
+                Text =
+                {
+                    Text = "[COST]",
+                    Align = TextAnchor.MiddleCenter,
+                    FontSize = 10,
+                }
+            }, $"Upgrade_slot[ENC]");
+            upgrade_slot.Add(new CuiLabel //COUNT
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 0.5",
+                    AnchorMax = "0.5 0.5",
+                    OffsetMin = "45 3",
+                    OffsetMax = "75 17"
+                },
+                Text =
+                {
+                    Text = "[PLAYER_LEVEL]",
+                    Align = TextAnchor.MiddleCenter,
+                    FontSize = 10
+                }
+            }, $"Upgrade_slot[ENC]");
             upgrade_slot.Add(new CuiButton
             {
-            RectTransform =
-            {
-                AnchorMin = "0 0",
-                AnchorMax = "1 1"
-            },
-            Button =
-            {
-                Color = "0, 0, 0, 0",
-                Command = "RCOIN_CONS UPGRADES BUY [ID] [ENC]"
-            },
-            Text = { Text = ""}
+                RectTransform =
+                {
+                    AnchorMin = "0 0",
+                    AnchorMax = "1 1"
+                },
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS UPGRADES BUY [ID] [ENC]"
+                },
+                Text = {Text = ""}
             }, $"Upgrade_slot[ENC]");
-                
-            
-            
+
+
             upgrade_plate.Add(new CuiButton
             {
                 RectTransform =
@@ -582,14 +573,13 @@ namespace Oxide.Plugins
                     OffsetMin = "30 -35",
                     OffsetMax = "70 -10"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
                     Command = "RCOIN_CONS HOME",
                 }
-                
-            },"Upgrade_plate");
+            }, "Upgrade_plate");
             upgrade_plate.Add(new CuiButton
             {
                 RectTransform =
@@ -599,14 +589,13 @@ namespace Oxide.Plugins
                     OffsetMin = "-70 15",
                     OffsetMax = "-30 45"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
                     Command = "RCOIN_CONS OPEN UPGRADES [PAGE_NEXT]",
                 }
-                
-            },"Upgrade_plate");
+            }, "Upgrade_plate");
             upgrade_plate.Add(new CuiButton
             {
                 RectTransform =
@@ -616,14 +605,13 @@ namespace Oxide.Plugins
                     OffsetMin = "25 15",
                     OffsetMax = "65 50"
                 },
-                Text = { Text = ""},
+                Text = {Text = ""},
                 Button =
                 {
                     Color = "0, 0, 0, 0",
                     Command = "RCOIN_CONS OPEN UPGRADES [PAGE_PREV]",
                 }
-                
-            },"Upgrade_plate");
+            }, "Upgrade_plate");
             upgrade_plate.Add(new CuiLabel
             {
                 Text =
@@ -631,7 +619,6 @@ namespace Oxide.Plugins
                     Text = "[PAGE]",
                     Align = TextAnchor.MiddleCenter,
                     FontSize = 18
-                    
                 },
                 RectTransform =
                 {
@@ -640,27 +627,25 @@ namespace Oxide.Plugins
                     OffsetMin = "-20 15",
                     OffsetMax = "20 47"
                 }
-            },"Upgrade_plate");
-            
+            }, "Upgrade_plate");
+
             upgrades_json = upgrades_main.ToJson();
             upgrade_plate_json = upgrade_plate.ToJson();
             upgarde_slot_json = upgrade_slot.ToJson();
-            
-
         }
 
         [ChatCommand("rcoin")]
         void OpenMenu(BasePlayer player)
         {
             DataPlayer t;
-            
+
             if (!_players.TryGetValue(player, out t)) return;
-            
+
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "closebutton");
             string top;
             if (!_top.TryGetValue(player, out top)) top = "0";
-            
+
             var avatar = GetImage(player.UserIDString);
             string jsonSend = main_json
                 .Replace("[MAIN_AVATAR]", avatar)
@@ -668,13 +653,14 @@ namespace Oxide.Plugins
                 .Replace("[ID]", t.id.ToString("0000"))
                 .Replace("[BALANCE]", t.coins.ToString("0.000"))
                 .Replace("[TOP_POSITION]", top);
-            
+
 
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "AddUI", jsonSend);
 
             CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null,
                 "AddUI", main_balance_gui_json.Replace("[BALANCE]", t.coins.ToString("0.000")));
+            _openInterface[player] = "main";
         }
 
         private void UpdateBalance(BasePlayer player)
@@ -690,7 +676,7 @@ namespace Oxide.Plugins
 
         private string GetImage(string shortname, ulong skin = 0) =>
             (string) ImageLibrary.Call("GetImage", shortname, skin);
-        
+
 
         void Commands(IPlayer user, string command, string[] args)
         {
@@ -700,6 +686,7 @@ namespace Oxide.Plugins
             {
                 case "main_close":
                 {
+                    _openInterface.Remove(player);
                     CommunityEntity.ServerInstance.ClientRPCEx(
                         new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "closebutton");
                     break;
@@ -718,55 +705,62 @@ namespace Oxide.Plugins
                     switch (args[1])
                     {
                         case "UPGRADES":
-                        {   
+                        {
                             DataPlayer t;
-                            if(!_players.TryGetValue(player, out t)) return;
-                            if(args[2].ToInt() < 0) return;
-                            if(args[2].ToInt() > _upgrades.Count / 6) return;
+                            if (!_players.TryGetValue(player, out t)) return;
+                            if (args[2].ToInt() < 0) return;
+                            if (args[2].ToInt() > _upgrades.Count / 6) return;
                             CommunityEntity.ServerInstance.ClientRPCEx(
                                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "main");
 
 
                             int page = int.Parse(args[2]);
-                            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", upgrades_json);
-                            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", upgrade_plate_json
-                                .Replace("[PAGE_NEXT]", $"{page+1}")
-                                .Replace("[PAGE_PREV]", $"{page-1}")
-                                .Replace("[PAGE]", $"{page+1}")
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                upgrades_json);
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                upgrade_plate_json
+                                    .Replace("[PAGE_NEXT]", $"{page + 1}")
+                                    .Replace("[PAGE_PREV]", $"{page - 1}")
+                                    .Replace("[PAGE]", $"{page + 1}")
                             );
                             int i = 0;
-                            
+
                             foreach (var x in _upgrades.Where(p => p.Value.isvisible).Skip(page * 6).Take(6))
                             {
                                 int lvl = t.upgrades.ContainsKey(x.Value.id) ? t.upgrades[x.Value.id] : 0;
                                 var image = GetImage(x.Value.url);
-                                CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", upgarde_slot_json
-                                    .Replace("[ENC]", i.ToString())
-                                    .Replace("[OMIN]", $"-89 {-115 - (48 * i)}")
-                                    .Replace("[OMAX]", $"85 {-70 -(48 * i)}")
-                                    .Replace("[IMAGE]", image)
-                                    .Replace("[NAME]", x.Value.name)
-                                    .Replace("[HOWADD]", x.Value.addcoin.ToString("0.000"))
-                                    .Replace("[COST]", (x.Value.cost * ((lvl + 1) * 0.75)).ToString("0.000"))
-                                    .Replace("[PLAYER_LEVEL]", lvl.ToString())
-                                    .Replace("[ID]", x.Value.id.ToString())
+                                CommunityEntity.ServerInstance.ClientRPCEx(
+                                    new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                    upgarde_slot_json
+                                        .Replace("[ENC]", i.ToString())
+                                        .Replace("[OMIN]", $"-89 {-115 - (48 * i)}")
+                                        .Replace("[OMAX]", $"85 {-70 - (48 * i)}")
+                                        .Replace("[IMAGE]", image)
+                                        .Replace("[NAME]", x.Value.name)
+                                        .Replace("[HOWADD]", x.Value.addcoin.ToString("0.000"))
+                                        .Replace("[COST]", (x.Value.cost * ((lvl + 1) * 0.75)).ToString("0.000"))
+                                        .Replace("[PLAYER_LEVEL]", lvl.ToString())
+                                        .Replace("[ID]", x.Value.id.ToString())
                                 );
                                 i++;
                             }
-                            
-                            
+
+                            _openInterface[player] = "upgrades";
+
                             break;
                         }
                         case "TOP":
                         {
                             CommunityEntity.ServerInstance.ClientRPCEx(
                                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "main");
-                            
-                            
+
+
                             break;
                         }
                     }
-                    
+
                     break;
                 }
                 case "UPGRADES":
@@ -776,47 +770,63 @@ namespace Oxide.Plugins
                         case "BUY":
                         {
                             DataPlayer t;
-                            if(!_players.TryGetValue(player, out t)) return;
+                            if (!_players.TryGetValue(player, out t)) return;
                             int i = args[3].ToInt();
                             int x = args[2].ToInt();
+
+                            if (t.upgrades.ContainsKey(x) && t.upgrades[x] + 1 > _upgrades[x].maxlvl) return;
                             int lvl = t.upgrades.ContainsKey(_upgrades[x].id) ? t.upgrades[_upgrades[x].id] : 0;
                             var image = GetImage(_upgrades[x].url);
                             CommunityEntity.ServerInstance.ClientRPCEx(
-                                new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", $"Upgrade_slot{i}");
+                                new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI",
+                                $"Upgrade_slot{i}");
 
-                            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", upgarde_slot_json
-                                .Replace("[ENC]", i.ToString())
-                                .Replace("[OMIN]", $"-89 {-115 - (48 * i)}")
-                                .Replace("[OMAX]", $"85 {-70 -(48 * i)}")
-                                .Replace("[IMAGE]", image)
-                                .Replace("[NAME]", _upgrades[x].name)
-                                .Replace("[HOWADD]", _upgrades[x].addcoin.ToString("0.000"))
-                                .Replace("[COST]", (_upgrades[x].cost * ((lvl + 1) * 0.75)).ToString("0.000"))
-                                .Replace("[PLAYER_LEVEL]", lvl.ToString())
-                                .Replace("[ID]", _upgrades[x].id.ToString())
-                            );
-                            
-                            if(!RemoveMoney(player, _upgrades[x].cost * ((lvl + 1) * 0.75)))
+                            if (!RemoveMoney(player, _upgrades[x].cost * ((lvl + 1) * 0.75)))
                             {
+                                CommunityEntity.ServerInstance.ClientRPCEx(
+                                    new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                    upgarde_slot_json
+                                        .Replace("[ENC]", i.ToString())
+                                        .Replace("[OMIN]", $"-89 {-115 - (48 * i)}")
+                                        .Replace("[OMAX]", $"85 {-70 - (48 * i)}")
+                                        .Replace("[IMAGE]", image)
+                                        .Replace("[NAME]", _upgrades[x].name)
+                                        .Replace("[HOWADD]", _upgrades[x].addcoin.ToString("0.000"))
+                                        .Replace("[COST]", (_upgrades[x].cost * ((lvl + 1) * 0.75)).ToString("0.000"))
+                                        .Replace("[PLAYER_LEVEL]", lvl.ToString())
+                                        .Replace("[ID]", _upgrades[x].id.ToString())
+                                );
                                 player.ChatMessage("Недостаточно RC!!");
                                 return;
                             }
+
                             GiveUpgrade(player, x);
-                            
+
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                upgarde_slot_json
+                                    .Replace("[ENC]", i.ToString())
+                                    .Replace("[OMIN]", $"-89 {-115 - (48 * i)}")
+                                    .Replace("[OMAX]", $"85 {-70 - (48 * i)}")
+                                    .Replace("[IMAGE]", image)
+                                    .Replace("[NAME]", _upgrades[x].name)
+                                    .Replace("[HOWADD]", _upgrades[x].addcoin.ToString("0.000"))
+                                    .Replace("[COST]", (_upgrades[x].cost * ((lvl + 1) * 0.75)).ToString("0.000"))
+                                    .Replace("[PLAYER_LEVEL]", t.upgrades[_upgrades[x].id].ToString())
+                                    .Replace("[ID]", _upgrades[x].id.ToString())
+                            );
                             break;
                         }
                     }
-                    
+
                     break;
                 }
                 case "HOME":
                 {
                     OpenMenu(player);
                     break;
-                }                    
-                
+                }
             }
-            
         }
 
         #endregion
@@ -854,7 +864,6 @@ namespace Oxide.Plugins
             {
                 info.upgrades[key] = upgradelvl + 1;
             }
-                
         }
 
         private void Upgrades()
@@ -894,10 +903,18 @@ namespace Oxide.Plugins
                 (code, response) => ServerMgr.Instance.StartCoroutine(GetInfo(player, code, response)), this,
                 Core.Libraries.RequestMethod.POST);
         }
+
         private void GetTopPlayer(BasePlayer player)
         {
             webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"steamid={player.userID}",
                 (code, response) => ServerMgr.Instance.StartCoroutine(TopPlayer(player, code, response)), this,
+                Core.Libraries.RequestMethod.POST);
+        }
+
+        private void GetServerTops()
+        {
+            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"id={3}&max=8",
+                (code, response) => ServerMgr.Instance.StartCoroutine(TopPlayer(null, code, response)), this,
                 Core.Libraries.RequestMethod.POST);
         }
 
@@ -907,35 +924,46 @@ namespace Oxide.Plugins
             {
                 Upgrades();
                 yield return CoroutineEx.waitForSeconds(10f);
-                if(!IsLoaded) yield break;
+                if (!IsLoaded) yield break;
                 ServerUpdate();
                 foreach (var player in _players)
                 {
                     GetTopPlayer(player.Key);
-                    double add = player.Value.upgrades.Sum(p =>
+                    double add = player.Value.upgrades.ToList().Sum(p =>
                     {
                         var t = 0.0;
                         if (_upgrades.ContainsKey(p.Key))
                         {
                             var lvl = p.Value;
                             if (p.Value > _upgrades[p.Key].maxlvl)
+                            {
+                                player.Value.upgrades[p.Key] = _upgrades[p.Key].maxlvl;
                                 lvl = _upgrades[p.Key].maxlvl;
+                            }
+
                             t = _upgrades[p.Key].addcoin * lvl;
                         }
 
                         return t;
                     });
+                    if (_openInterface.ContainsKey(player.Key))
+                    {
+                        Puts("5");
+                        if (_openInterface[player.Key] == "main") UpdateBalance(player.Key);
+                        else player.Key.SendConsoleCommand("RCOIN_CONS OPEN UPGRADES 0");
+                    }
+
                     player.Value.coins += add;
                     player.Value.serverid = serverId;
                     coins += add;
                     Update(player.Key, player.Value.coins, player.Value.serverid, player.Value.upgrades);
-                    
                 }
             }
 
             yield break;
         }
 
+        private Dictionary<BasePlayer, string> _openInterface = new Dictionary<BasePlayer, string>();
         private Dictionary<BasePlayer, DataPlayer> _players = new Dictionary<BasePlayer, DataPlayer>();
 
         class DataPlayer
@@ -979,18 +1007,34 @@ namespace Oxide.Plugins
             public bool isvisible;
         }
 
-       
+        class TopInfo
+        {
+            public int top;
+            public string name;
+            public double coins;
+        }
 
+        private List<TopInfo> _topServer = new List<TopInfo>();
         private Dictionary<BasePlayer, string> _top = new Dictionary<BasePlayer, string>();
+
         IEnumerator TopPlayer(BasePlayer player, int code, string response)
         {
-            
-            if(!IsLoaded) yield break;
+            if (!IsLoaded) yield break;
             if (response == null) yield break;
             if (code == 200)
             {
-                if(player == null || _top == null) yield break;
-                _top[player] = response;
+                int top;
+                if (int.TryParse(response, out top)) _top[player] = response;
+                else
+                {
+                    var json = JsonConvert.DeserializeObject<Dictionary<int, TopInfo>>(response);
+                    _topServer.Clear();
+                    foreach (var keyValuePair in json)
+                    {
+                        _topServer.Add(keyValuePair.Value);
+                    }
+                }
+
                 yield break;
             }
 
@@ -1005,7 +1049,7 @@ namespace Oxide.Plugins
 
         IEnumerator ServerUpdates(int code, string response)
         {
-            if(!IsLoaded) yield break;
+            if (!IsLoaded) yield break;
             if (response == null) yield break;
             if (code == 200)
             {
@@ -1013,7 +1057,7 @@ namespace Oxide.Plugins
                 {
                     ServerUpdate();
                     yield return CoroutineEx.waitForSeconds(2f);
-                    if(!IsLoaded) yield break;
+                    if (!IsLoaded) yield break;
                     SetServer();
                     yield break;
                 }
@@ -1021,6 +1065,8 @@ namespace Oxide.Plugins
                 var json = JsonConvert.DeserializeObject<ServerId>(response);
                 serverId = json.id;
                 coins = json.coins;
+
+                GetServerTops();
             }
 
             yield break;
@@ -1028,7 +1074,7 @@ namespace Oxide.Plugins
 
         IEnumerator UpInfo(int code, string response)
         {
-            if(!IsLoaded) yield break;
+            if (!IsLoaded) yield break;
             if (response == null) yield break;
             if (code == 200)
             {
@@ -1044,6 +1090,7 @@ namespace Oxide.Plugins
                     if (!_upgrades.ContainsKey(upgradesInfo.id)) _upgrades.Add(upgradesInfo.id, upgradesInfo);
                     else _upgrades[upgradesInfo.id] = upgradesInfo;
                 }
+
                 GenerateUpgrades();
             }
 
@@ -1052,8 +1099,8 @@ namespace Oxide.Plugins
 
         IEnumerator GetInfo(BasePlayer player, int code, string response)
         {
-            if(!IsLoaded) yield break;
-            
+            if (!IsLoaded) yield break;
+
             if (response == null) yield break;
             if (code == 200)
             {
@@ -1061,7 +1108,7 @@ namespace Oxide.Plugins
                 {
                     Update(player, 0, serverId, new Dictionary<int, int>());
                     yield return CoroutineEx.waitForSeconds(2f);
-                    if(!IsLoaded) yield break;
+                    if (!IsLoaded) yield break;
                     GetInfos(player);
                     yield break;
                 }

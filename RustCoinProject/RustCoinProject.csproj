@@ -9,7 +9,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>RustCoinProject</RootNamespace>
         <AssemblyName>RustCoinProject</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -35,516 +35,1023 @@
         <Compile Include="RustCoin.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Reference Include="0Harmony, Version=1.2.0.1, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\0Harmony.dll</HintPath>
-      </Reference>
-      <Reference Include="Accessibility, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\Accessibility.dll</HintPath>
-      </Reference>
-      <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Assembly-CSharp.dll</HintPath>
-      </Reference>
-      <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-      </Reference>
-      <Reference Include="CurvedTextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\CurvedTextMeshPro.dll</HintPath>
-      </Reference>
-      <Reference Include="DelaunayER, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\DelaunayER.dll</HintPath>
-      </Reference>
-      <Reference Include="EasyAntiCheat.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\EasyAntiCheat.Client.dll</HintPath>
-      </Reference>
-      <Reference Include="EasyAntiCheat.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\EasyAntiCheat.Server.dll</HintPath>
-      </Reference>
-      <Reference Include="EasyRoads3Dv3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\EasyRoads3Dv3.dll</HintPath>
-      </Reference>
-      <Reference Include="EZhex1991.EZSoftBone, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\EZhex1991.EZSoftBone.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.BurstCloth, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.BurstCloth.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.Console, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.Console.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.GoogleSheets, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.GoogleSheets.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.Input, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.Input.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.Network, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.Network.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.Raknet, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.Raknet.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.Rcon, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.Rcon.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.Skeleton, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.Skeleton.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.Sqlite, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.Sqlite.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.SteamNetworking, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.SteamNetworking.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.Steamworks.Win64, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.Steamworks.Win64.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.System, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.System.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.Unity, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.Unity.dll</HintPath>
-      </Reference>
-      <Reference Include="Facepunch.UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Facepunch.UnityEngine.dll</HintPath>
-      </Reference>
-      <Reference Include="Fleck, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Fleck.dll</HintPath>
-      </Reference>
-      <Reference Include="GA, Version=1.1.7168.19305, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\GA.dll</HintPath>
-      </Reference>
-      <Reference Include="I18N, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\I18N.dll</HintPath>
-      </Reference>
-      <Reference Include="I18N.CJK, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\I18N.CJK.dll</HintPath>
-      </Reference>
-      <Reference Include="I18N.MidEast, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\I18N.MidEast.dll</HintPath>
-      </Reference>
-      <Reference Include="I18N.Other, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\I18N.Other.dll</HintPath>
-      </Reference>
-      <Reference Include="I18N.Rare, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\I18N.Rare.dll</HintPath>
-      </Reference>
-      <Reference Include="I18N.West, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\I18N.West.dll</HintPath>
-      </Reference>
-      <Reference Include="Ionic.Zip.Reduced, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c">
-        <HintPath>D:\Managed\Ionic.Zip.Reduced.dll</HintPath>
-      </Reference>
-      <Reference Include="LZ4, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd">
-        <HintPath>D:\Managed\LZ4.dll</HintPath>
-      </Reference>
-      <Reference Include="LZ4pn, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd">
-        <HintPath>D:\Managed\LZ4pn.dll</HintPath>
-      </Reference>
-      <Reference Include="Melanchall.DryWetMidi, Version=6.0.0.0, Culture=neutral, PublicKeyToken=83d0ffad275219ad">
-        <HintPath>D:\Managed\Melanchall.DryWetMidi.dll</HintPath>
-      </Reference>
-      <Reference Include="MidiJack, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\MidiJack.dll</HintPath>
-      </Reference>
-      <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\Mono.Data.Sqlite.dll</HintPath>
-      </Reference>
-      <Reference Include="Mono.Data.Tds, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\Mono.Data.Tds.dll</HintPath>
-      </Reference>
-      <Reference Include="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\Mono.Posix.dll</HintPath>
-      </Reference>
-      <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\Mono.Security.dll</HintPath>
-      </Reference>
-      <Reference Include="Mono.WebBrowser, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\Mono.WebBrowser.dll</HintPath>
-      </Reference>
-      <Reference Include="MP3Sharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\MP3Sharp.dll</HintPath>
-      </Reference>
-      <Reference Include="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\mscorlib.dll</HintPath>
-      </Reference>
-      <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\MySql.Data.dll</HintPath>
-      </Reference>
-      <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-        <HintPath>D:\Managed\netstandard.dll</HintPath>
-      </Reference>
-      <Reference Include="NewAssembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\NewAssembly.dll</HintPath>
-      </Reference>
-      <Reference Include="Novell.Directory.Ldap, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
-        <HintPath>D:\Managed\Novell.Directory.Ldap.dll</HintPath>
-      </Reference>
-      <Reference Include="Oxide.Core, Version=2.0.4006.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Oxide.Core.dll</HintPath>
-      </Reference>
-      <Reference Include="Oxide.CSharp, Version=2.0.4046.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Oxide.CSharp.dll</HintPath>
-      </Reference>
-      <Reference Include="Oxide.Ext.RustEdit, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Oxide.Ext.RustEdit.dll</HintPath>
-      </Reference>
-      <Reference Include="Oxide.MySql, Version=2.0.3760.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Oxide.MySql.dll</HintPath>
-      </Reference>
-      <Reference Include="Oxide.References, Version=2.0.3779.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Oxide.References.dll</HintPath>
-      </Reference>
-      <Reference Include="Oxide.Rust, Version=2.0.5437.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Oxide.Rust.dll</HintPath>
-      </Reference>
-      <Reference Include="Oxide.SQLite, Version=2.0.3762.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Oxide.SQLite.dll</HintPath>
-      </Reference>
-      <Reference Include="Oxide.Unity, Version=2.0.3772.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Oxide.Unity.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.Data, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.Data.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.Demo, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.Demo.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.Global, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.Global.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.Harmony, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.Harmony.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.Localization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.Localization.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.Platform, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.Platform.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.Platform.Common, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.Platform.Common.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.Platform.Steam, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.Platform.Steam.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.UI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.UI.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.Workshop, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.Workshop.dll</HintPath>
-      </Reference>
-      <Reference Include="Rust.World, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Rust.World.dll</HintPath>
-      </Reference>
-      <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-        <HintPath>D:\Managed\System.Buffers.dll</HintPath>
-      </Reference>
-      <Reference Include="System.ComponentModel.Composition, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.ComponentModel.Composition.dll</HintPath>
-      </Reference>
-      <Reference Include="System.ComponentModel.DataAnnotations, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-        <HintPath>D:\Managed\System.ComponentModel.DataAnnotations.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Configuration.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Configuration.Install, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Configuration.Install.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.Core.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.Data.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Data.SQLite, Version=1.0.97.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
-        <HintPath>D:\Managed\System.Data.SQLite.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Design.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Diagnostics.StackTrace, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Diagnostics.StackTrace.dll</HintPath>
-      </Reference>
-      <Reference Include="System.DirectoryServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.DirectoryServices.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Drawing.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Drawing.Design.dll</HintPath>
-      </Reference>
-      <Reference Include="System.EnterpriseServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.EnterpriseServices.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Globalization.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Globalization.Extensions.dll</HintPath>
-      </Reference>
-      <Reference Include="System.IO.Compression, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.IO.Compression.dll</HintPath>
-      </Reference>
-      <Reference Include="System.IO.Compression.FileSystem, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.IO.Compression.FileSystem.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-        <HintPath>D:\Managed\System.Memory.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Net.Http.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.Numerics.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Numerics.Vectors.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Runtime.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.Runtime.Serialization.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Runtime.Serialization.Formatters.Soap, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Runtime.Serialization.Formatters.Soap.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Runtime.Serialization.Xml, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Runtime.Serialization.Xml.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Security.dll</HintPath>
-      </Reference>
-      <Reference Include="System.ServiceModel.Internals, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.ServiceModel.Internals.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-        <HintPath>D:\Managed\System.Threading.Tasks.Extensions.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Transactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.Transactions.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Web.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Web.ApplicationServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-        <HintPath>D:\Managed\System.Web.ApplicationServices.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Web.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Web.Services.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.Windows.Forms.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.Xml.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-        <HintPath>D:\Managed\System.Xml.Linq.dll</HintPath>
-      </Reference>
-      <Reference Include="System.Xml.XPath.XDocument, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>D:\Managed\System.Xml.XPath.XDocument.dll</HintPath>
-      </Reference>
-      <Reference Include="Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Unity.Burst.dll</HintPath>
-      </Reference>
-      <Reference Include="Unity.Burst.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Unity.Burst.Unsafe.dll</HintPath>
-      </Reference>
-      <Reference Include="Unity.Mathematics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Unity.Mathematics.dll</HintPath>
-      </Reference>
-      <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\Unity.TextMeshPro.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.AccessibilityModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.AccessibilityModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.AIModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.AndroidJNIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.AndroidJNIModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.AnimationModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ARModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.ARModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.AudioModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ClothModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.ClothModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ClusterInputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.ClusterInputModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ClusterRendererModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.ClusterRendererModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.CoreModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.CrashReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.CrashReportingModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.DirectorModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.DirectorModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.DSPGraphModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.DSPGraphModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.GameCenterModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.GameCenterModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.GridModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.GridModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.HotReloadModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.HotReloadModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.InputModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.LocalizationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.LocalizationModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.PerformanceReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.PerformanceReportingModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.Physics2DModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ProfilerModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.ProfilerModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.ScreenCaptureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SharedInternalsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.SharedInternalsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SpriteMaskModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.SpriteMaskModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SpriteShapeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.SpriteShapeModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.StreamingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.StreamingModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SubstanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.SubstanceModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.SubsystemsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.SubsystemsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TerrainModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.TerrainModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TerrainPhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TextCoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.TextCoreModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TilemapModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.TilemapModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.TLSModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.TLSModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UI.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UIElementsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UIModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UmbraModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UmbraModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UNETModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UNETModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityAnalyticsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityConnectModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UnityConnectModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityTestProtocolModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UnityTestProtocolModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestAudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestTextureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.VehiclesModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.VFXModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.VFXModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.VideoModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.VideoModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.VRModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.WindModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.WindModule.dll</HintPath>
-      </Reference>
-      <Reference Include="UnityEngine.XRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>D:\Managed\UnityEngine.XRModule.dll</HintPath>
-      </Reference>
+        <Reference Include="0Harmony">
+            <HintPath>D:\Managed\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="0Harmony, Version=1.2.0.1, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="Accessibility">
+            <HintPath>D:\Managed\Accessibility.dll</HintPath>
+        </Reference>
+        <Reference Include="Accessibility, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\Accessibility.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp">
+            <HintPath>D:\Managed\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+            <HintPath>D:\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+        </Reference>
+        <Reference Include="CurvedTextMeshPro">
+            <HintPath>D:\Managed\CurvedTextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="CurvedTextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\CurvedTextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="DelaunayER">
+            <HintPath>D:\Managed\DelaunayER.dll</HintPath>
+        </Reference>
+        <Reference Include="DelaunayER, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\DelaunayER.dll</HintPath>
+        </Reference>
+        <Reference Include="EasyAntiCheat.Client">
+            <HintPath>D:\Managed\EasyAntiCheat.Client.dll</HintPath>
+        </Reference>
+        <Reference Include="EasyAntiCheat.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\EasyAntiCheat.Client.dll</HintPath>
+        </Reference>
+        <Reference Include="EasyAntiCheat.Server">
+            <HintPath>D:\Managed\EasyAntiCheat.Server.dll</HintPath>
+        </Reference>
+        <Reference Include="EasyAntiCheat.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\EasyAntiCheat.Server.dll</HintPath>
+        </Reference>
+        <Reference Include="EasyRoads3Dv3">
+            <HintPath>D:\Managed\EasyRoads3Dv3.dll</HintPath>
+        </Reference>
+        <Reference Include="EasyRoads3Dv3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\EasyRoads3Dv3.dll</HintPath>
+        </Reference>
+        <Reference Include="EZhex1991.EZSoftBone">
+            <HintPath>D:\Managed\EZhex1991.EZSoftBone.dll</HintPath>
+        </Reference>
+        <Reference Include="EZhex1991.EZSoftBone, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\EZhex1991.EZSoftBone.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.BurstCloth">
+            <HintPath>D:\Managed\Facepunch.BurstCloth.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.BurstCloth, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.BurstCloth.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Console">
+            <HintPath>D:\Managed\Facepunch.Console.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Console, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.Console.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.GoogleSheets">
+            <HintPath>D:\Managed\Facepunch.GoogleSheets.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.GoogleSheets, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.GoogleSheets.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Input">
+            <HintPath>D:\Managed\Facepunch.Input.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Input, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.Input.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Network">
+            <HintPath>D:\Managed\Facepunch.Network.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Network, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.Network.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Raknet">
+            <HintPath>D:\Managed\Facepunch.Raknet.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Raknet, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.Raknet.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Rcon">
+            <HintPath>D:\Managed\Facepunch.Rcon.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Rcon, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.Rcon.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Skeleton">
+            <HintPath>D:\Managed\Facepunch.Skeleton.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Skeleton, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.Skeleton.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Sqlite">
+            <HintPath>D:\Managed\Facepunch.Sqlite.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Sqlite, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.Sqlite.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.SteamNetworking">
+            <HintPath>D:\Managed\Facepunch.SteamNetworking.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.SteamNetworking, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.SteamNetworking.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Steamworks.Win64">
+            <HintPath>D:\Managed\Facepunch.Steamworks.Win64.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Steamworks.Win64, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.Steamworks.Win64.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.System">
+            <HintPath>D:\Managed\Facepunch.System.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.System, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.System.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Unity">
+            <HintPath>D:\Managed\Facepunch.Unity.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.Unity, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.Unity.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.UnityEngine">
+            <HintPath>D:\Managed\Facepunch.UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="Facepunch.UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Facepunch.UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="Fleck">
+            <HintPath>D:\Managed\Fleck.dll</HintPath>
+        </Reference>
+        <Reference Include="Fleck, Version=0.0.0.1, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Fleck.dll</HintPath>
+        </Reference>
+        <Reference Include="GA">
+            <HintPath>D:\Managed\GA.dll</HintPath>
+        </Reference>
+        <Reference Include="GA, Version=1.1.7168.19305, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\GA.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N">
+            <HintPath>D:\Managed\I18N.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\I18N.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.CJK">
+            <HintPath>D:\Managed\I18N.CJK.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.CJK, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\I18N.CJK.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.MidEast">
+            <HintPath>D:\Managed\I18N.MidEast.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.MidEast, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\I18N.MidEast.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.Other">
+            <HintPath>D:\Managed\I18N.Other.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.Other, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\I18N.Other.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.Rare">
+            <HintPath>D:\Managed\I18N.Rare.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.Rare, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\I18N.Rare.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.West">
+            <HintPath>D:\Managed\I18N.West.dll</HintPath>
+        </Reference>
+        <Reference Include="I18N.West, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\I18N.West.dll</HintPath>
+        </Reference>
+        <Reference Include="Ionic.Zip.Reduced">
+            <HintPath>D:\Managed\Ionic.Zip.Reduced.dll</HintPath>
+        </Reference>
+        <Reference Include="Ionic.Zip.Reduced, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c">
+            <HintPath>D:\Managed\Ionic.Zip.Reduced.dll</HintPath>
+        </Reference>
+        <Reference Include="LZ4">
+            <HintPath>D:\Managed\LZ4.dll</HintPath>
+        </Reference>
+        <Reference Include="LZ4, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd">
+            <HintPath>D:\Managed\LZ4.dll</HintPath>
+        </Reference>
+        <Reference Include="LZ4pn">
+            <HintPath>D:\Managed\LZ4pn.dll</HintPath>
+        </Reference>
+        <Reference Include="LZ4pn, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd">
+            <HintPath>D:\Managed\LZ4pn.dll</HintPath>
+        </Reference>
+        <Reference Include="Melanchall.DryWetMidi">
+            <HintPath>D:\Managed\Melanchall.DryWetMidi.dll</HintPath>
+        </Reference>
+        <Reference Include="Melanchall.DryWetMidi, Version=6.0.0.0, Culture=neutral, PublicKeyToken=83d0ffad275219ad">
+            <HintPath>D:\Managed\Melanchall.DryWetMidi.dll</HintPath>
+        </Reference>
+        <Reference Include="MidiJack">
+            <HintPath>D:\Managed\MidiJack.dll</HintPath>
+        </Reference>
+        <Reference Include="MidiJack, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\MidiJack.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Data.Sqlite">
+            <HintPath>D:\Managed\Mono.Data.Sqlite.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Data.Sqlite, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\Mono.Data.Sqlite.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Data.Tds">
+            <HintPath>D:\Managed\Mono.Data.Tds.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Data.Tds, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\Mono.Data.Tds.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Posix">
+            <HintPath>D:\Managed\Mono.Posix.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\Mono.Posix.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Security">
+            <HintPath>D:\Managed\Mono.Security.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\Mono.Security.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.WebBrowser">
+            <HintPath>D:\Managed\Mono.WebBrowser.dll</HintPath>
+        </Reference>
+        <Reference Include="Mono.WebBrowser, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\Mono.WebBrowser.dll</HintPath>
+        </Reference>
+        <Reference Include="MP3Sharp">
+            <HintPath>D:\Managed\MP3Sharp.dll</HintPath>
+        </Reference>
+        <Reference Include="MP3Sharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\MP3Sharp.dll</HintPath>
+        </Reference>
+        <Reference Include="mscorlib">
+            <HintPath>D:\Managed\mscorlib.dll</HintPath>
+        </Reference>
+        <Reference Include="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\mscorlib.dll</HintPath>
+        </Reference>
+        <Reference Include="MySql.Data">
+            <HintPath>D:\Managed\MySql.Data.dll</HintPath>
+        </Reference>
+        <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\MySql.Data.dll</HintPath>
+        </Reference>
+        <Reference Include="netstandard">
+            <HintPath>D:\Managed\netstandard.dll</HintPath>
+        </Reference>
+        <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>D:\Managed\netstandard.dll</HintPath>
+        </Reference>
+        <Reference Include="NewAssembly">
+            <HintPath>D:\Managed\NewAssembly.dll</HintPath>
+        </Reference>
+        <Reference Include="NewAssembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\NewAssembly.dll</HintPath>
+        </Reference>
+        <Reference Include="Novell.Directory.Ldap">
+            <HintPath>D:\Managed\Novell.Directory.Ldap.dll</HintPath>
+        </Reference>
+        <Reference Include="Novell.Directory.Ldap, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+            <HintPath>D:\Managed\Novell.Directory.Ldap.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.Core">
+            <HintPath>D:\Managed\Oxide.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.Core, Version=2.0.4006.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Oxide.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.CSharp">
+            <HintPath>D:\Managed\Oxide.CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.CSharp, Version=2.0.4046.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Oxide.CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.Ext.RustEdit, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Oxide.Ext.RustEdit.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.MySql">
+            <HintPath>D:\Managed\Oxide.MySql.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.MySql, Version=2.0.3760.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Oxide.MySql.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.References">
+            <HintPath>D:\Managed\Oxide.References.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.References, Version=2.0.3779.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Oxide.References.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.Rust">
+            <HintPath>D:\Managed\Oxide.Rust.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.Rust, Version=2.0.5437.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Oxide.Rust.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.SQLite">
+            <HintPath>D:\Managed\Oxide.SQLite.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.SQLite, Version=2.0.3762.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Oxide.SQLite.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.Unity">
+            <HintPath>D:\Managed\Oxide.Unity.dll</HintPath>
+        </Reference>
+        <Reference Include="Oxide.Unity, Version=2.0.3772.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Oxide.Unity.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Data">
+            <HintPath>D:\Managed\Rust.Data.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Data, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.Data.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Demo">
+            <HintPath>D:\Managed\Rust.Demo.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Demo, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.Demo.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Global">
+            <HintPath>D:\Managed\Rust.Global.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Global, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.Global.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Harmony">
+            <HintPath>D:\Managed\Rust.Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Harmony, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Localization">
+            <HintPath>D:\Managed\Rust.Localization.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Localization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.Localization.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Platform">
+            <HintPath>D:\Managed\Rust.Platform.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Platform, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.Platform.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Platform.Common">
+            <HintPath>D:\Managed\Rust.Platform.Common.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Platform.Common, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.Platform.Common.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Platform.Steam">
+            <HintPath>D:\Managed\Rust.Platform.Steam.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Platform.Steam, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.Platform.Steam.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.UI">
+            <HintPath>D:\Managed\Rust.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.UI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Workshop">
+            <HintPath>D:\Managed\Rust.Workshop.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.Workshop, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.Workshop.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.World">
+            <HintPath>D:\Managed\Rust.World.dll</HintPath>
+        </Reference>
+        <Reference Include="Rust.World, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Rust.World.dll</HintPath>
+        </Reference>
+        <Reference Include="System">
+            <HintPath>D:\Managed\System.dll</HintPath>
+        </Reference>
+        <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Buffers">
+            <HintPath>D:\Managed\System.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>D:\Managed\System.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="System.ComponentModel.Composition">
+            <HintPath>D:\Managed\System.ComponentModel.Composition.dll</HintPath>
+        </Reference>
+        <Reference Include="System.ComponentModel.Composition, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.ComponentModel.Composition.dll</HintPath>
+        </Reference>
+        <Reference Include="System.ComponentModel.DataAnnotations">
+            <HintPath>D:\Managed\System.ComponentModel.DataAnnotations.dll</HintPath>
+        </Reference>
+        <Reference Include="System.ComponentModel.DataAnnotations, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+            <HintPath>D:\Managed\System.ComponentModel.DataAnnotations.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Configuration">
+            <HintPath>D:\Managed\System.Configuration.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Configuration.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Configuration.Install">
+            <HintPath>D:\Managed\System.Configuration.Install.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Configuration.Install, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Configuration.Install.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Core">
+            <HintPath>D:\Managed\System.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Data">
+            <HintPath>D:\Managed\System.Data.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.Data.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Data.SQLite">
+            <HintPath>D:\Managed\System.Data.SQLite.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Data.SQLite, Version=1.0.97.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139">
+            <HintPath>D:\Managed\System.Data.SQLite.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Design">
+            <HintPath>D:\Managed\System.Design.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Design.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Diagnostics.StackTrace">
+            <HintPath>D:\Managed\System.Diagnostics.StackTrace.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Diagnostics.StackTrace, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Diagnostics.StackTrace.dll</HintPath>
+        </Reference>
+        <Reference Include="System.DirectoryServices">
+            <HintPath>D:\Managed\System.DirectoryServices.dll</HintPath>
+        </Reference>
+        <Reference Include="System.DirectoryServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.DirectoryServices.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Drawing">
+            <HintPath>D:\Managed\System.Drawing.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Drawing.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Drawing.Design">
+            <HintPath>D:\Managed\System.Drawing.Design.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Drawing.Design.dll</HintPath>
+        </Reference>
+        <Reference Include="System.EnterpriseServices">
+            <HintPath>D:\Managed\System.EnterpriseServices.dll</HintPath>
+        </Reference>
+        <Reference Include="System.EnterpriseServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.EnterpriseServices.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Globalization.Extensions">
+            <HintPath>D:\Managed\System.Globalization.Extensions.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Globalization.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Globalization.Extensions.dll</HintPath>
+        </Reference>
+        <Reference Include="System.IO.Compression">
+            <HintPath>D:\Managed\System.IO.Compression.dll</HintPath>
+        </Reference>
+        <Reference Include="System.IO.Compression, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.IO.Compression.dll</HintPath>
+        </Reference>
+        <Reference Include="System.IO.Compression.FileSystem">
+            <HintPath>D:\Managed\System.IO.Compression.FileSystem.dll</HintPath>
+        </Reference>
+        <Reference Include="System.IO.Compression.FileSystem, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.IO.Compression.FileSystem.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Memory">
+            <HintPath>D:\Managed\System.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>D:\Managed\System.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Net.Http">
+            <HintPath>D:\Managed\System.Net.Http.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Net.Http.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Numerics">
+            <HintPath>D:\Managed\System.Numerics.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.Numerics.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Numerics.Vectors">
+            <HintPath>D:\Managed\System.Numerics.Vectors.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Numerics.Vectors.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime">
+            <HintPath>D:\Managed\System.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe">
+            <HintPath>D:\Managed\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.Serialization">
+            <HintPath>D:\Managed\System.Runtime.Serialization.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.Runtime.Serialization.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.Serialization.Formatters.Soap">
+            <HintPath>D:\Managed\System.Runtime.Serialization.Formatters.Soap.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.Serialization.Formatters.Soap, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Runtime.Serialization.Formatters.Soap.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.Serialization.Xml">
+            <HintPath>D:\Managed\System.Runtime.Serialization.Xml.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.Serialization.Xml, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Runtime.Serialization.Xml.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Security">
+            <HintPath>D:\Managed\System.Security.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Security.dll</HintPath>
+        </Reference>
+        <Reference Include="System.ServiceModel.Internals">
+            <HintPath>D:\Managed\System.ServiceModel.Internals.dll</HintPath>
+        </Reference>
+        <Reference Include="System.ServiceModel.Internals, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.ServiceModel.Internals.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Threading.Tasks.Extensions">
+            <HintPath>D:\Managed\System.Threading.Tasks.Extensions.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>D:\Managed\System.Threading.Tasks.Extensions.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Transactions">
+            <HintPath>D:\Managed\System.Transactions.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Transactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.Transactions.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Web">
+            <HintPath>D:\Managed\System.Web.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Web.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Web.ApplicationServices">
+            <HintPath>D:\Managed\System.Web.ApplicationServices.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Web.ApplicationServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+            <HintPath>D:\Managed\System.Web.ApplicationServices.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Web.Services">
+            <HintPath>D:\Managed\System.Web.Services.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Web.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Web.Services.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Windows.Forms">
+            <HintPath>D:\Managed\System.Windows.Forms.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.Windows.Forms.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml">
+            <HintPath>D:\Managed\System.Xml.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.Xml.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml.Linq">
+            <HintPath>D:\Managed\System.Xml.Linq.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <HintPath>D:\Managed\System.Xml.Linq.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml.XPath.XDocument">
+            <HintPath>D:\Managed\System.Xml.XPath.XDocument.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml.XPath.XDocument, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>D:\Managed\System.Xml.XPath.XDocument.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Burst">
+            <HintPath>D:\Managed\Unity.Burst.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Unity.Burst.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Burst.Unsafe">
+            <HintPath>D:\Managed\Unity.Burst.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Burst.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Unity.Burst.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Mathematics">
+            <HintPath>D:\Managed\Unity.Mathematics.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Mathematics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Unity.Mathematics.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>D:\Managed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine">
+            <HintPath>D:\Managed\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AccessibilityModule">
+            <HintPath>D:\Managed\UnityEngine.AccessibilityModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AccessibilityModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.AccessibilityModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AIModule">
+            <HintPath>D:\Managed\UnityEngine.AIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.AIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AndroidJNIModule">
+            <HintPath>D:\Managed\UnityEngine.AndroidJNIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AndroidJNIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.AndroidJNIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AnimationModule">
+            <HintPath>D:\Managed\UnityEngine.AnimationModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.AnimationModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ARModule">
+            <HintPath>D:\Managed\UnityEngine.ARModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ARModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.ARModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AssetBundleModule">
+            <HintPath>D:\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AudioModule">
+            <HintPath>D:\Managed\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClothModule">
+            <HintPath>D:\Managed\UnityEngine.ClothModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClothModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.ClothModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClusterInputModule">
+            <HintPath>D:\Managed\UnityEngine.ClusterInputModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClusterInputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.ClusterInputModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClusterRendererModule">
+            <HintPath>D:\Managed\UnityEngine.ClusterRendererModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClusterRendererModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.ClusterRendererModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>D:\Managed\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CrashReportingModule">
+            <HintPath>D:\Managed\UnityEngine.CrashReportingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CrashReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.CrashReportingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.DirectorModule">
+            <HintPath>D:\Managed\UnityEngine.DirectorModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.DirectorModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.DirectorModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.DSPGraphModule">
+            <HintPath>D:\Managed\UnityEngine.DSPGraphModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.DSPGraphModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.DSPGraphModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.GameCenterModule">
+            <HintPath>D:\Managed\UnityEngine.GameCenterModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.GameCenterModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.GameCenterModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.GridModule">
+            <HintPath>D:\Managed\UnityEngine.GridModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.GridModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.GridModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.HotReloadModule">
+            <HintPath>D:\Managed\UnityEngine.HotReloadModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.HotReloadModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.HotReloadModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ImageConversionModule">
+            <HintPath>D:\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.IMGUIModule">
+            <HintPath>D:\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.InputLegacyModule">
+            <HintPath>D:\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.InputModule">
+            <HintPath>D:\Managed\UnityEngine.InputModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.InputModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.JSONSerializeModule">
+            <HintPath>D:\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.JSONSerializeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.LocalizationModule">
+            <HintPath>D:\Managed\UnityEngine.LocalizationModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.LocalizationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.LocalizationModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ParticleSystemModule">
+            <HintPath>D:\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PerformanceReportingModule">
+            <HintPath>D:\Managed\UnityEngine.PerformanceReportingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PerformanceReportingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.PerformanceReportingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.Physics2DModule">
+            <HintPath>D:\Managed\UnityEngine.Physics2DModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.Physics2DModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+            <HintPath>D:\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ProfilerModule">
+            <HintPath>D:\Managed\UnityEngine.ProfilerModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ProfilerModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.ProfilerModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ScreenCaptureModule">
+            <HintPath>D:\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ScreenCaptureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SharedInternalsModule">
+            <HintPath>D:\Managed\UnityEngine.SharedInternalsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SharedInternalsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.SharedInternalsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SpriteMaskModule">
+            <HintPath>D:\Managed\UnityEngine.SpriteMaskModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SpriteMaskModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.SpriteMaskModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SpriteShapeModule">
+            <HintPath>D:\Managed\UnityEngine.SpriteShapeModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SpriteShapeModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.SpriteShapeModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.StreamingModule">
+            <HintPath>D:\Managed\UnityEngine.StreamingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.StreamingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.StreamingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SubstanceModule">
+            <HintPath>D:\Managed\UnityEngine.SubstanceModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SubstanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.SubstanceModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SubsystemsModule">
+            <HintPath>D:\Managed\UnityEngine.SubsystemsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SubsystemsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.SubsystemsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TerrainModule">
+            <HintPath>D:\Managed\UnityEngine.TerrainModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TerrainModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.TerrainModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TerrainPhysicsModule">
+            <HintPath>D:\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TerrainPhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextCoreModule">
+            <HintPath>D:\Managed\UnityEngine.TextCoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextCoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.TextCoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule">
+            <HintPath>D:\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TilemapModule">
+            <HintPath>D:\Managed\UnityEngine.TilemapModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TilemapModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.TilemapModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TLSModule">
+            <HintPath>D:\Managed\UnityEngine.TLSModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TLSModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.TLSModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>D:\Managed\UnityEngine.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UIElementsModule">
+            <HintPath>D:\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UIModule">
+            <HintPath>D:\Managed\UnityEngine.UIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UmbraModule">
+            <HintPath>D:\Managed\UnityEngine.UmbraModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UmbraModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UmbraModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UNETModule">
+            <HintPath>D:\Managed\UnityEngine.UNETModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UNETModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UNETModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityAnalyticsModule">
+            <HintPath>D:\Managed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityAnalyticsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityConnectModule">
+            <HintPath>D:\Managed\UnityEngine.UnityConnectModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityConnectModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UnityConnectModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityTestProtocolModule">
+            <HintPath>D:\Managed\UnityEngine.UnityTestProtocolModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityTestProtocolModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UnityTestProtocolModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestModule">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestTextureModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VehiclesModule">
+            <HintPath>D:\Managed\UnityEngine.VehiclesModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.VehiclesModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VFXModule">
+            <HintPath>D:\Managed\UnityEngine.VFXModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VFXModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.VFXModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VideoModule">
+            <HintPath>D:\Managed\UnityEngine.VideoModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VideoModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.VideoModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VRModule">
+            <HintPath>D:\Managed\UnityEngine.VRModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.VRModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.WindModule">
+            <HintPath>D:\Managed\UnityEngine.WindModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.WindModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.WindModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.XRModule">
+            <HintPath>D:\Managed\UnityEngine.XRModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.XRModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>D:\Managed\UnityEngine.XRModule.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
