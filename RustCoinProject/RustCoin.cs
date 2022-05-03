@@ -67,10 +67,6 @@ namespace Oxide.Plugins
                 Unload();
             }
 
-            AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
-            Generate();
-
-
             ImageLibrary.Call("AddImage", main_back, main_back); //main_background
             ImageLibrary.Call("AddImage", main_border, main_border); //main_border
             ImageLibrary.Call("AddImage", main_tap, main_tap); //main_tap
@@ -81,6 +77,8 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage", upgrade_backimage, upgrade_backimage); //upgrade_backimage
             ImageLibrary.Call("AddImage", main_top, main_top); //main_top
             ImageLibrary.Call("AddImage", avatar_rc, avatar_rc); //main_top
+            AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
+            Generate();
         }
 
         #endregion
@@ -658,7 +656,7 @@ namespace Oxide.Plugins
                 }
             }, "closebutton", "Top_plate");
             int i = 0;
-            foreach (var x in _topAllPlayers)
+            foreach (var x in _topServer)
             {
                 ImageLibrary.Call("GetPlayerAvatar", x.steamid.ToString());
                 top_plate.Add(new CuiElement
@@ -725,7 +723,7 @@ namespace Oxide.Plugins
                 }
             });
             int i1 = 0;
-            foreach (var x in _topAllPlayers)
+            foreach (var x in _topServer)
             {
                 top_plate.Add(new CuiPanel
                 {
@@ -1144,6 +1142,8 @@ namespace Oxide.Plugins
                 yield return CoroutineEx.waitForSeconds(10f);
                 if (!IsLoaded) yield break;
                 ServerUpdate();
+                GetServerTops();
+                AllPlayersTop();
                 foreach (var player in _players)
                 {
                     GetTopPlayer(player.Key);
@@ -1251,14 +1251,14 @@ namespace Oxide.Plugins
             if (response == null) yield break;
             if (code == 200)
             {
-                Puts(response);
                 var json = JsonConvert.DeserializeObject<Dictionary<int, TopInfo>>(response);
                 _topAllPlayers.Clear();
                 foreach (var keyValuePair in json)
                 {
                     _topAllPlayers.Add(keyValuePair.Value);
                 }
-                
+
+                GenerateTop();
                 yield break;
             }
 
@@ -1315,8 +1315,6 @@ namespace Oxide.Plugins
                 var json = JsonConvert.DeserializeObject<ServerId>(response);
                 serverId = json.id;
                 coins = json.coins;
-                GetServerTops();
-                AllPlayersTop();
             }
 
             yield break;
