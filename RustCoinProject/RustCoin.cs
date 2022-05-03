@@ -661,7 +661,11 @@ namespace Oxide.Plugins
 
             CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null,
                 "AddUI", main_balance_gui_json.Replace("[BALANCE]", t.coins.ToString("0.000")));
-            _openInterface[player] = "main";
+            _openInterface[player] = new InterfaceInfo
+            {
+                Interface = "main",
+                Page = 0,
+            };
         }
 
         private void UpdateBalance(BasePlayer player)
@@ -748,7 +752,13 @@ namespace Oxide.Plugins
                                 i++;
                             }
 
-                            _openInterface[player] = "upgrades";
+                            
+                            _openInterface[player] = new InterfaceInfo
+                            {
+                                Interface = "upgrades",
+                                Page = page
+                            };
+                            
 
                             break;
                         }
@@ -775,7 +785,11 @@ namespace Oxide.Plugins
                             int i = args[3].ToInt();
                             int x = args[2].ToInt();
 
-                            if (t.upgrades.ContainsKey(x) && t.upgrades[x] + 1 > _upgrades[x].maxlvl) return;
+                            if (t.upgrades.ContainsKey(x) && t.upgrades[x] + 1 > _upgrades[x].maxlvl)
+                            {
+                                ReplySend(player,"Максимальный уровень достигнут!");
+                                return;
+                            }
                             int lvl = t.upgrades.ContainsKey(_upgrades[x].id) ? t.upgrades[_upgrades[x].id] : 0;
                             var image = GetImage(_upgrades[x].url);
                             CommunityEntity.ServerInstance.ClientRPCEx(
@@ -797,7 +811,7 @@ namespace Oxide.Plugins
                                         .Replace("[PLAYER_LEVEL]", lvl.ToString())
                                         .Replace("[ID]", _upgrades[x].id.ToString())
                                 );
-                                player.ChatMessage("Недостаточно RC!!");
+                                ReplySend(player,"Недостаточно RC!!");
                                 return;
                             }
 
@@ -836,7 +850,9 @@ namespace Oxide.Plugins
 
         private int serverId = -1;
         private double coins = 0;
-
+        
+        private void ReplySend(BasePlayer player, string message) => player.SendConsoleCommand("chat.add 0",
+            new object[2] {76561199239612154, $"{message} "});
         private void AddMoney(BasePlayer player, double coin)
         {
             DataPlayer info;
@@ -914,7 +930,7 @@ namespace Oxide.Plugins
 
         private void GetServerTops()
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"id={3}&max=8",
+            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"id={serverId}&max=8",
                 (code, response) => ServerMgr.Instance.StartCoroutine(TopPlayer(null, code, response)), this,
                 Core.Libraries.RequestMethod.POST);
         }
@@ -949,9 +965,8 @@ namespace Oxide.Plugins
                     });
                     if (_openInterface.ContainsKey(player.Key))
                     {
-                        Puts("5");
-                        if (_openInterface[player.Key] == "main") UpdateBalance(player.Key);
-                        else player.Key.SendConsoleCommand("RCOIN_CONS OPEN UPGRADES 0");
+                        if (_openInterface[player.Key].Interface == "main") UpdateBalance(player.Key);
+                        else player.Key.SendConsoleCommand($"RCOIN_CONS OPEN UPGRADES {_openInterface[player.Key].Page}");
                     }
 
                     player.Value.coins += add;
@@ -964,8 +979,14 @@ namespace Oxide.Plugins
             yield break;
         }
 
-        private Dictionary<BasePlayer, string> _openInterface = new Dictionary<BasePlayer, string>();
+        private Dictionary<BasePlayer, InterfaceInfo> _openInterface = new Dictionary<BasePlayer, InterfaceInfo>();
         private Dictionary<BasePlayer, DataPlayer> _players = new Dictionary<BasePlayer, DataPlayer>();
+
+        class InterfaceInfo
+        {
+            public string Interface;
+            public int Page;
+        }
 
         class DataPlayer
         {
@@ -1013,6 +1034,7 @@ namespace Oxide.Plugins
             public int top;
             public string name;
             public double coins;
+            public int id;
         }
 
         private List<TopInfo> _topServer = new List<TopInfo>();
