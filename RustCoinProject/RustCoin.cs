@@ -1659,9 +1659,8 @@ namespace Oxide.Plugins
             while (this.IsLoaded)
             {
                 yield return CoroutineEx.waitForSeconds(5f);
-                SetServer();
                 Upgrades();
-                ServerUpdate();
+                SetServer();
                 AllPlayersTop();
                 yield return CoroutineEx.waitForSeconds(295f);
                 if (!IsLoaded) yield break;
