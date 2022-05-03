@@ -658,7 +658,7 @@ namespace Oxide.Plugins
                 }
             }, "closebutton", "Top_plate");
             int i = 0;
-            foreach (var x in _topServer)
+            foreach (var x in _topAllPlayers)
             {
                 ImageLibrary.Call("GetPlayerAvatar", x.steamid.ToString());
                 top_plate.Add(new CuiElement
@@ -684,7 +684,7 @@ namespace Oxide.Plugins
 
             if (i < 8)
             {
-                for (int j = i; i == 8; j++)
+                for (int j = i; j < 8; j++)
                 {
                     top_plate.Add(new CuiElement
                     {
@@ -725,7 +725,7 @@ namespace Oxide.Plugins
                 }
             });
             int i1 = 0;
-            foreach (var x in _topServer)
+            foreach (var x in _topAllPlayers)
             {
                 top_plate.Add(new CuiPanel
                 {
@@ -1131,7 +1131,7 @@ namespace Oxide.Plugins
 
         private void GetServerTops()
         {
-            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"id=3&max=8",
+            webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"id={serverId}&max=8",
                 (code, response) => ServerMgr.Instance.StartCoroutine(TopPlayer(null, code, response)), this,
                 Core.Libraries.RequestMethod.POST);
         }
@@ -1251,19 +1251,14 @@ namespace Oxide.Plugins
             if (response == null) yield break;
             if (code == 200)
             {
-                int top;
-                if (int.TryParse(response, out top)) _top[player] = response;
-                else
+                Puts(response);
+                var json = JsonConvert.DeserializeObject<Dictionary<int, TopInfo>>(response);
+                _topAllPlayers.Clear();
+                foreach (var keyValuePair in json)
                 {
-                    var json = JsonConvert.DeserializeObject<Dictionary<int, TopInfo>>(response);
-                    _topAllPlayers.Clear();
-                    foreach (var keyValuePair in json)
-                    {
-                        _topAllPlayers.Add(keyValuePair.Value);
-                    }
-                    //GenerateTop();
+                    _topAllPlayers.Add(keyValuePair.Value);
                 }
-
+                
                 yield break;
             }
 
