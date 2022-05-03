@@ -848,7 +848,7 @@ namespace Oxide.Plugins
                     {
                         AnchorMin = "0.5 0",
                         AnchorMax = "0.5 0",
-                        OffsetMin = "-93 15",
+                        OffsetMin = "-92 15",
                         OffsetMax = "-36 48"
                     }
                 }
@@ -1135,7 +1135,7 @@ namespace Oxide.Plugins
                     {
                         AnchorMin = "0.5 0",
                         AnchorMax = "0.5 0",
-                        OffsetMin = "-93 15",
+                        OffsetMin = "-92 15",
                         OffsetMax = "-36 48"
                     }
                 }
@@ -1335,7 +1335,7 @@ namespace Oxide.Plugins
                                         .Replace("[IMAGE]", image)
                                         .Replace("[NAME]", x.Value.name)
                                         .Replace("[HOWADD]", (x.Value.addcoin * (lvl + 1)).ToString("0.000"))
-                                        .Replace("[COST]", (x.Value.cost * ((lvl + 1) * 0.75)).ToString("0.000"))
+                                        .Replace("[COST]", (x.Value.cost * Math.Pow(1.15, lvl + 1)).ToString("0.000"))
                                         .Replace("[PLAYER_LEVEL]", lvl.ToString())
                                         .Replace("[ID]", x.Value.id.ToString())
                                 );
@@ -1412,7 +1412,7 @@ namespace Oxide.Plugins
                                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI",
                                 $"Upgrade_slot{i}");
 
-                            if (!RemoveMoney(player, _upgrades[x].cost * ((lvl + 1) * 0.75)))
+                            if (!RemoveMoney(player, _upgrades[x].cost * Math.Pow(1.15, lvl)))
                             {
                                 CommunityEntity.ServerInstance.ClientRPCEx(
                                     new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
@@ -1423,7 +1423,7 @@ namespace Oxide.Plugins
                                         .Replace("[IMAGE]", image)
                                         .Replace("[NAME]", _upgrades[x].name)
                                         .Replace("[HOWADD]", (_upgrades[x].addcoin * (lvl + 1)).ToString("0.000"))
-                                        .Replace("[COST]", (_upgrades[x].cost * ((lvl + 1) * 0.75)).ToString("0.000"))
+                                        .Replace("[COST]", (_upgrades[x].cost * Math.Pow(1.15, lvl)).ToString("0.000"))
                                         .Replace("[PLAYER_LEVEL]", lvl.ToString())
                                         .Replace("[ID]", _upgrades[x].id.ToString())
                                 );
@@ -1442,7 +1442,7 @@ namespace Oxide.Plugins
                                     .Replace("[IMAGE]", image)
                                     .Replace("[NAME]", _upgrades[x].name)
                                     .Replace("[HOWADD]", (_upgrades[x].addcoin * (lvl + 1)).ToString("0.000"))
-                                    .Replace("[COST]", (_upgrades[x].cost * ((lvl + 1) * 0.75)).ToString("0.000"))
+                                    .Replace("[COST]", (_upgrades[x].cost * Math.Pow(1.15, lvl)).ToString("0.000"))
                                     .Replace("[PLAYER_LEVEL]", t.upgrades[_upgrades[x].id].ToString())
                                     .Replace("[ID]", _upgrades[x].id.ToString())
                             );
