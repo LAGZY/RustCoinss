@@ -50,6 +50,9 @@ namespace Oxide.Plugins
         public string upgrade_backimage = "https://imgur.com/7MFgOuM.png";
         public string main_top = "https://imgur.com/CR0T5ZL.png";
         public string avatar_rc = "https://i.imgur.com/pd0rGiP.png";
+        public string server_players = "https://imgur.com/pjNErHn.png";
+        public string global_players = "https://imgur.com/KXk2pQ6.png";
+        public string global_servers = "https://imgur.com/Z7k6n5B.png";
 
         private void OnServerInitialized()
         {
@@ -77,6 +80,11 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage", upgrade_backimage, upgrade_backimage); //upgrade_backimage
             ImageLibrary.Call("AddImage", main_top, main_top); //main_top
             ImageLibrary.Call("AddImage", avatar_rc, avatar_rc); //main_top
+            ImageLibrary.Call("AddImage", server_players, server_players); //main_top
+            ImageLibrary.Call("AddImage", global_players, global_players); //main_top
+            ImageLibrary.Call("AddImage", global_servers, global_servers); //main_top
+            
+            
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
             Generate();
         }
@@ -94,7 +102,8 @@ namespace Oxide.Plugins
         private string upgrades_json;
         private string upgrade_plate_json;
         private string upgarde_slot_json;
-        private string top_json;
+        private string top_json_all;
+        private string top_json_server;
 
         #endregion
 
@@ -362,7 +371,7 @@ namespace Oxide.Plugins
                 Button =
                 {
                     Color = "0, 0, 0, 0",
-                    Command = "RCOIN_CONS OPEN TOP"
+                    Command = "RCOIN_CONS OPEN TOP 2"
                 },
                 Text = {Text = ""}
             }, "Phone");
@@ -639,8 +648,10 @@ namespace Oxide.Plugins
 
         void GenerateTop()
         {
-            CuiElementContainer top_plate = new CuiElementContainer();
-            top_plate.Add(new CuiPanel
+            CuiElementContainer top_plate_all = new CuiElementContainer();
+            CuiElementContainer top_plate_server = new CuiElementContainer();
+            CuiElementContainer top_plate_servers_global = new CuiElementContainer();
+            top_plate_all.Add(new CuiPanel
             {
                 CursorEnabled = true,
                 RectTransform =
@@ -656,10 +667,10 @@ namespace Oxide.Plugins
                 }
             }, "closebutton", "Top_plate");
             int i = 0;
-            foreach (var x in _topServer)
+            foreach (var x in _topAllPlayers)
             {
                 ImageLibrary.Call("GetPlayerAvatar", x.steamid.ToString());
-                top_plate.Add(new CuiElement
+                top_plate_all.Add(new CuiElement
                 {
                     Parent = "Top_plate",
                     Components =
@@ -684,7 +695,7 @@ namespace Oxide.Plugins
             {
                 for (int j = i; j < 8; j++)
                 {
-                    top_plate.Add(new CuiElement
+                    top_plate_all.Add(new CuiElement
                     {
                         Parent = "Top_plate",
                         Components =
@@ -705,7 +716,7 @@ namespace Oxide.Plugins
                 }
             }
 
-            top_plate.Add(new CuiElement
+            top_plate_all.Add(new CuiElement
             {
                 Parent = "Top_plate",
                 Name = "Top_main",
@@ -723,9 +734,9 @@ namespace Oxide.Plugins
                 }
             });
             int i1 = 0;
-            foreach (var x in _topServer)
+            foreach (var x in _topAllPlayers)
             {
-                top_plate.Add(new CuiPanel
+                top_plate_all.Add(new CuiPanel
                 {
                     RectTransform =
                     {
@@ -736,7 +747,7 @@ namespace Oxide.Plugins
                     },
                     Image = {Color = "0, 0, 0, 0"}
                 }, "Top_main", $"Top_slot{i1}");
-                top_plate.Add(new CuiLabel
+                top_plate_all.Add(new CuiLabel
                 {
                     RectTransform =
                     {
@@ -753,7 +764,7 @@ namespace Oxide.Plugins
                     }
                 }, $"Top_slot{i1}");
                 i++;
-                top_plate.Add(new CuiLabel
+                top_plate_all.Add(new CuiLabel
                 {
                     RectTransform =
                     {
@@ -769,7 +780,7 @@ namespace Oxide.Plugins
                         FontSize = 10,
                     }
                 }, $"Top_slot{i1}");
-                top_plate.Add(new CuiLabel
+                top_plate_all.Add(new CuiLabel
                 {
                     RectTransform =
                     {
@@ -788,7 +799,7 @@ namespace Oxide.Plugins
                 i1++;
             }
 
-            top_plate.Add(new CuiElement
+            top_plate_all.Add(new CuiElement
             {
                 Parent = "Top_plate",
                 Name = "Top_phone",
@@ -805,7 +816,7 @@ namespace Oxide.Plugins
                     }
                 }
             });
-            top_plate.Add(new CuiButton
+            top_plate_all.Add(new CuiButton
             {
                 RectTransform =
                 {
@@ -821,7 +832,404 @@ namespace Oxide.Plugins
                     Command = "RCOIN_CONS HOME"
                 }
             }, "Top_phone");
-            top_json = top_plate.ToJson();
+            
+
+            top_plate_all.Add(new CuiElement //SERVER PLAYERS
+            {
+                Parent = "Top_phone",
+                Name = "SERVER_PLAYERS",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(server_players)
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0",
+                        AnchorMax = "0.5 0",
+                        OffsetMin = "-93 15",
+                        OffsetMax = "-36 48"
+                    }
+                }
+            });
+            top_plate_all.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMax = "1 1",
+                    AnchorMin = "0 0"
+                },
+                Text = { Text = ""},
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS OPEN TOP 1"
+                    
+                }
+            },"SERVER_PLAYERS");
+            top_plate_all.Add(new CuiElement //GLOBAL PLAYERS
+            {
+                Parent = "Top_phone",
+                Name = "GLOBAL_PLAYERS",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(global_players),
+                        Color = "0.5 0.5 0.5 1"
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0",
+                        AnchorMax = "0.5 0",
+                        OffsetMin = "-32 15",
+                        OffsetMax = "25 48"
+                    }
+                }
+            });
+            top_plate_all.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMax = "1 1",
+                    AnchorMin = "0 0"
+                },
+                Text = { Text = ""},
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = ""
+                    
+                }
+            },"GLOBAL_PLAYERS");
+            top_plate_all.Add(new CuiElement //SERVERS_TOP
+            {
+                Parent = "Top_phone",
+                Name = "SERVERS_TOP",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(global_servers),
+                        Color = "1 0.5 0.5 1"
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0",
+                        AnchorMax = "0.5 0",
+                        OffsetMin = "30 15",
+                        OffsetMax = "87 48"
+                    }
+                }
+            });
+            top_plate_all.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMax = "1 1",
+                    AnchorMin = "0 0"
+                },
+                Text = { Text = ""},
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS OPEN TOP 3"
+                    
+                }
+            },"SERVERS_TOP");
+            top_json_all = top_plate_all.ToJson();
+/////////SERVER_TOP/////////SERVER_TOP/////SERVER_TOP/////SERVER_TOP//////SERVER_TOP////////SERVER_TOP/////////SERVER_TOP///////SERVER_TOP///////SERVER_TOP//////SERVER_TOP///////////SERVER_TOP///////
+            top_plate_server.Add(new CuiPanel
+            {
+                CursorEnabled = true,
+                RectTransform =
+                {
+                    AnchorMin = "1 0.5",
+                    AnchorMax = "1 0.5",
+                    OffsetMin = "-300 -216",
+                    OffsetMax = "-50 216"
+                },
+                Image =
+                {
+                    Color = "0, 0, 0, 0"
+                }
+            }, "closebutton", "Top_plate");
+            int ii = 0;
+            foreach (var x in _topServer)
+            {
+                ImageLibrary.Call("GetPlayerAvatar", x.steamid.ToString());
+                top_plate_server.Add(new CuiElement
+                {
+                    Parent = "Top_plate",
+                    Components =
+                    {
+                        new CuiRawImageComponent
+                        {
+                            Png = GetImage(x.steamid.ToString())
+                        },
+                        new CuiRectTransformComponent
+                        {
+                            AnchorMin = "0 1",
+                            AnchorMax = "0 1",
+                            OffsetMin = $"30 {-109 - (35 * ii)}",
+                            OffsetMax = $"64 {-74 - (35 * ii)}"
+                        }
+                    }
+                });
+                ii++;
+            }
+
+            if (ii < 8)
+            {
+                for (int j = ii; j < 8; j++)
+                {
+                    top_plate_server.Add(new CuiElement
+                    {
+                        Parent = "Top_plate",
+                        Components =
+                        {
+                            new CuiRawImageComponent
+                            {
+                                Png = GetImage(avatar_rc)
+                            },
+                            new CuiRectTransformComponent
+                            {
+                                AnchorMin = "0 1",
+                                AnchorMax = "0 1",
+                                OffsetMin = $"30 {-109 - (35 * j)}",
+                                OffsetMax = $"64 {-74 - (35 * j)}"
+                            }
+                        }
+                    });
+                }
+            }
+
+            top_plate_server.Add(new CuiElement
+            {
+                Parent = "Top_plate",
+                Name = "Top_main",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(main_top)
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0 0",
+                        AnchorMax = "1 1"
+                    }
+                }
+            });
+            int ii1 = 0;
+            foreach (var x in _topServer)
+            {
+                top_plate_server.Add(new CuiPanel
+                {
+                    RectTransform =
+                    {
+                        AnchorMin = "0.5 1",
+                        AnchorMax = "0.5 1",
+                        OffsetMin = $"-85 {-110 - (35 * ii1)}",
+                        OffsetMax = $"85 {-75 - (35 * ii1)}"
+                    },
+                    Image = {Color = "0, 0, 0, 0"}
+                }, "Top_main", $"Top_slot{ii1}");
+                top_plate_server.Add(new CuiLabel
+                {
+                    RectTransform =
+                    {
+                        AnchorMin = "0.5 0",
+                        AnchorMax = "0.5 0",
+                        OffsetMin = "-60 23",
+                        OffsetMax = "60 35"
+                    },
+                    Text =
+                    {
+                        Text = x.name,
+                        Align = TextAnchor.UpperLeft,
+                        FontSize = 10,
+                    }
+                }, $"Top_slot{ii1}");
+                i++;
+                top_plate_server.Add(new CuiLabel
+                {
+                    RectTransform =
+                    {
+                        AnchorMin = "0.5 0",
+                        AnchorMax = "0.5 0",
+                        OffsetMin = "-60 7",
+                        OffsetMax = "-20 20"
+                    },
+                    Text =
+                    {
+                        Text = x.id.ToString("0000"),
+                        Align = TextAnchor.MiddleCenter,
+                        FontSize = 10,
+                    }
+                }, $"Top_slot{ii1}");
+                top_plate_server.Add(new CuiLabel
+                {
+                    RectTransform =
+                    {
+                        AnchorMin = "0.5 0",
+                        AnchorMax = "0.5 0",
+                        OffsetMin = "-15 7",
+                        OffsetMax = "60 20"
+                    },
+                    Text =
+                    {
+                        Text = x.coins.ToString("0.000"),
+                        Align = TextAnchor.MiddleCenter,
+                        FontSize = 10,
+                    }
+                }, $"Top_slot{ii1}");
+                i1++;
+            }
+
+            top_plate_server.Add(new CuiElement
+            {
+                Parent = "Top_plate",
+                Name = "Top_phone",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(main_phone)
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0 0",
+                        AnchorMax = "1 1"
+                    }
+                }
+            });
+            top_plate_server.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0 1",
+                    AnchorMax = "0 1",
+                    OffsetMin = "20 -37",
+                    OffsetMax = "70 -5"
+                },
+                Text = {Text = ""},
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS HOME"
+                }
+            }, "Top_phone");
+            
+
+            top_plate_server.Add(new CuiElement //SERVER PLAYERS
+            {
+                Parent = "Top_phone",
+                Name = "SERVER_PLAYERS",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(server_players),
+                        Color = "0.5 0.5 0.5 1"
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0",
+                        AnchorMax = "0.5 0",
+                        OffsetMin = "-93 15",
+                        OffsetMax = "-36 48"
+                    }
+                }
+            });
+            top_plate_server.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMax = "1 1",
+                    AnchorMin = "0 0"
+                },
+                Text = { Text = ""},
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = ""
+                    
+                }
+            },"SERVER_PLAYERS");
+            top_plate_server.Add(new CuiElement //GLOBAL PLAYERS
+            {
+                Parent = "Top_phone",
+                Name = "GLOBAL_PLAYERS",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(global_players)
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0",
+                        AnchorMax = "0.5 0",
+                        OffsetMin = "-32 15",
+                        OffsetMax = "25 48"
+                    }
+                }
+            });
+            top_plate_server.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMax = "1 1",
+                    AnchorMin = "0 0"
+                },
+                Text = { Text = ""},
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS OPEN TOP 2"
+                    
+                }
+            },"GLOBAL_PLAYERS");
+            top_plate_server.Add(new CuiElement //SERVERS_TOP
+            {
+                Parent = "Top_phone",
+                Name = "SERVERS_TOP",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(global_servers),
+                        Color = "1 0.5 0.5 1"
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0",
+                        AnchorMax = "0.5 0",
+                        OffsetMin = "30 15",
+                        OffsetMax = "87 48"
+                    }
+                }
+            });
+            top_plate_server.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMax = "1 1",
+                    AnchorMin = "0 0"
+                },
+                Text = { Text = ""},
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS OPEN TOP 3"
+                    
+                }
+            },"SERVERS_TOP");
+            top_json_server = top_plate_server.ToJson();
+            
+            
         }
 
 
@@ -954,10 +1362,31 @@ namespace Oxide.Plugins
                         }
                         case "TOP":
                         {
-                            CommunityEntity.ServerInstance.ClientRPCEx(
-                                new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "main");
-                            CommunityEntity.ServerInstance.ClientRPCEx(
-                                new Network.SendInfo {connection = player.net.connection}, null, "AddUI", top_json);
+                            switch (args[2])
+                            {
+                                case "1":
+                                {
+                                    CommunityEntity.ServerInstance.ClientRPCEx(
+                                        new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "main");
+                                    CommunityEntity.ServerInstance.ClientRPCEx(
+                                        new Network.SendInfo {connection = player.net.connection}, null, "AddUI", top_json_server);
+                                    break;
+                                }
+                                case "2":
+                                {
+                                    CommunityEntity.ServerInstance.ClientRPCEx(
+                                        new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "main");
+                                    CommunityEntity.ServerInstance.ClientRPCEx(
+                                        new Network.SendInfo {connection = player.net.connection}, null, "AddUI", top_json_all);
+                                    break;
+                                }
+                                case "3":
+                                {
+                                    ReplySend(player, "Пока что тут ничего нет! Но скоро добавим!");
+                                    break;
+                                }
+                            }
+                           
                             break;
                         }
                     }
@@ -1139,11 +1568,12 @@ namespace Oxide.Plugins
             while (this.IsLoaded)
             {
                 Upgrades();
+                GetServerTops();
+                AllPlayersTop();
                 yield return CoroutineEx.waitForSeconds(10f);
                 if (!IsLoaded) yield break;
                 ServerUpdate();
-                GetServerTops();
-                AllPlayersTop();
+                
                 foreach (var player in _players)
                 {
                     GetTopPlayer(player.Key);
