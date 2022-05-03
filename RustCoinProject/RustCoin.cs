@@ -634,6 +634,7 @@ namespace Oxide.Plugins
             upgarde_slot_json = upgrade_slot.ToJson();
         }
 
+
         [ChatCommand("rcoin")]
         void OpenMenu(BasePlayer player)
         {
