@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.31")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.32")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -32,8 +32,22 @@ namespace Oxide.Plugins
             _players.Remove(player);
         }
 
+        private void MediumUnload()
+        {
+            foreach (var coroutine in _coroutines.ToList().Where(c => c != null))
+            {
+                ServerMgr.Instance.StopCoroutine(coroutine);
+            }
+
+            foreach (var basePlayer in BasePlayer.activePlayerList)
+            {
+                OnPlayerDisconnected(basePlayer);
+            }
+        }
+
         private void Unload()
         {
+            if (start != null) ServerMgr.Instance.StopCoroutine(start);
             foreach (var coroutine in _coroutines.ToList().Where(c => c != null))
             {
                 ServerMgr.Instance.StopCoroutine(coroutine);
@@ -59,10 +73,12 @@ namespace Oxide.Plugins
         public string global_players = "https://imgur.com/KXk2pQ6.png";
         public string global_servers = "https://imgur.com/Z7k6n5B.png";
 
+        private Coroutine start;
+
         private void OnServerInitialized()
         {
             StatusCheck();
-            ServerMgr.Instance.StartCoroutine(UpdateMysql());
+            start = ServerMgr.Instance.StartCoroutine(UpdateMysql());
 
             foreach (var basePlayer in BasePlayer.activePlayerList)
             {
@@ -1409,7 +1425,7 @@ namespace Oxide.Plugins
 
                             if (t.upgrades.ContainsKey(x) && t.upgrades[x] + 1 > _upgrades[x].maxlvl)
                             {
-                                ReplySend(player, "Максимальный уровень достигнут!");
+                                ReplySend(player, "[RUST-COIN] Максимальный уровень достигнут!");
                                 return;
                             }
 
@@ -1434,7 +1450,7 @@ namespace Oxide.Plugins
                                         .Replace("[PLAYER_LEVEL]", lvl.ToString())
                                         .Replace("[ID]", _upgrades[x].id.ToString())
                                 );
-                                ReplySend(player, "Недостаточно RC!!");
+                                ReplySend(player, "[RUST-COIN] Недостаточно RC!!");
                                 return;
                             }
 
@@ -1655,14 +1671,21 @@ namespace Oxide.Plugins
 
         private IEnumerator UpdateMysql()
         {
-            Debug.LogWarning("Подождите плагин загружается......");
+            Debug.LogWarning("[RUST-COIN] Подождите плагин загружается......");
+            yield return CoroutineEx.waitForSeconds(5f);
+            while (status == 0)
+            {
+                yield return CoroutineEx.waitForSeconds(60f);
+                StatusCheck();
+            }
+
+            SetServer();
+            Debug.LogWarning("[RUST-COIN] Плагин успешно загружен!");
             while (this.IsLoaded)
             {
-                yield return CoroutineEx.waitForSeconds(5f);
                 Upgrades();
-                SetServer();
                 AllPlayersTop();
-                yield return CoroutineEx.waitForSeconds(295f);
+                yield return CoroutineEx.waitForSeconds(300f);
                 if (!IsLoaded) yield break;
                 ServerUpdate();
                 StatusCheck();
@@ -1856,6 +1879,8 @@ namespace Oxide.Plugins
             yield break;
         }
 
+        private int status = 1;
+
         IEnumerator CheckStatus(int code, string response)
         {
             if (!IsLoaded) yield break;
@@ -1870,8 +1895,26 @@ namespace Oxide.Plugins
 
                 if (json.status == 0)
                 {
-                    Debug.LogError("Плагин временно не работает!");
-                    Interface.Oxide.UnloadPlugin(Name);
+                    if (status == 1)
+                    {
+                        MediumUnload();
+                        _upgrades.Clear();
+                        _topAllPlayers.Clear();
+                        _topServer.Clear();
+                        _top.Clear();
+                    }
+
+                    if (status != json.status)
+                    {
+                        Debug.LogError("[RUST-COIN] Плагин временно не работает!");
+                        status = json.status;
+                    }
+                }
+                else
+                {
+                    if (status == 0)
+                        Interface.Oxide.ReloadPlugin(Name);
+                    status = 1;
                 }
             }
 
