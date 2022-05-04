@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.42")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.43")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -100,7 +100,7 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage", global_players, global_players); //main_top
             ImageLibrary.Call("AddImage", global_servers, global_servers); //main_top
 
-
+            AddCovalenceCommand("rcpromo", nameof(UsePromocode));
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
             Generate();
         }
@@ -1290,6 +1290,13 @@ namespace Oxide.Plugins
         private string GetImage(string shortname, ulong skin = 0) =>
             (string) ImageLibrary.Call("GetImage", shortname, skin);
 
+        void UsePromocode(IPlayer user, string command, string[] args)
+        {
+            if (args.Length < 1) return;
+            BasePlayer player = user.Object as BasePlayer;
+            var promo = args[1];
+            SendPromocode(promo, _players[player].id);
+        }
 
         void Commands(IPlayer user, string command, string[] args)
         {
