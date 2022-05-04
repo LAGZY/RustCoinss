@@ -2048,7 +2048,6 @@ namespace Oxide.Plugins
             if (response == null) yield break;
             if (code == 200)
             {
-                Puts(response);
                 var player = _players.FirstOrDefault(p => p.Value.id == playerid);
                 if (player.Value == null) yield break;
                 switch (response)
