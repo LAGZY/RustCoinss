@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.41")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.42")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -2060,6 +2060,7 @@ namespace Oxide.Plugins
                         yield break;
                     default:
                         player.Value.coins += double.Parse(response);
+                        coins += double.Parse(response);
                         ReplySend(player.Key,
                             $"[RUST-COIN] Вам начисленно {double.Parse(response).ToString("0.000")} RC за использование промокода!");
                         yield break;
