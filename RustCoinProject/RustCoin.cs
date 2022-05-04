@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.37")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.40")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -1297,6 +1297,32 @@ namespace Oxide.Plugins
 
             switch (args[0])
             {
+                case "sendtransfer":
+                {
+                    if (args.Length < 3) return;
+                    var targetid = args[1].ToInt();
+                    var coins = args[2].ToInt();
+                    if (coins < 1)
+                    {
+                        ReplySend(player, "[RUST-COIN] Че умный дохуя?!");
+                        return;
+                    }
+
+                    if (_players[player].id == targetid)
+                    {
+                        ReplySend(player, "[RUST-COIN] Нельзя переводить самому себе!");
+                        return;
+                    }
+
+                    if (_players[player].coins < coins)
+                    {
+                        ReplySend(player, "[RUST-COIN] У вас не достаточно средств!");
+                        return;
+                    }
+
+                    SendTransfer(_players[player].id, targetid, coins);
+                    break;
+                }
                 case "main_close":
                 {
                     _openInterface.Remove(player);
@@ -1534,6 +1560,59 @@ namespace Oxide.Plugins
             }
         }
 
+        private void GetTransfer(int id)
+        {
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/transfer.php", $"targetid={id}",
+                    (code2, response2) =>
+                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(Transfer(-1, id, 0, code2, response2))),
+                    this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
+        }
+
+        private void CheckCompleteTransfer(int id)
+        {
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/transfer.php", $"playerid={id}",
+                    (code2, response2) =>
+                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(Transfer(id, -1, 0, code2, response2))),
+                    this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
+        }
+
+        private void SendTransfer(int playerid, int targetid, int coins)
+        {
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/transfer.php",
+                    $"playerid={playerid}&targetid={targetid}&coins={coins}",
+                    (code2, response2) =>
+                        _coroutines.Add(
+                            ServerMgr.Instance.StartCoroutine(Transfer(playerid, targetid, coins, code2, response2))),
+                    this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
+        }
+
         private void Upgrades()
         {
             try
@@ -1718,6 +1797,8 @@ namespace Oxide.Plugins
                     player.Value.coins += add;
                     player.Value.serverid = serverId;
                     coins += add;
+                    GetTransfer(player.Value.id);
+                    CheckCompleteTransfer(player.Value.id);
                     Update(player.Key, player.Value.coins, player.Value.serverid, player.Value.upgrades);
                     if (_openInterface.ContainsKey(player.Key))
                     {
@@ -1798,6 +1879,15 @@ namespace Oxide.Plugins
             public ulong steamid;
             public string name;
             public double coins;
+        }
+
+        class Transfers
+        {
+            public int id;
+            public int playerid;
+            public string name;
+            public int coins;
+            public int complete;
         }
 
         private List<TopInfo> _topAllPlayers = new List<TopInfo>();
@@ -1921,6 +2011,64 @@ namespace Oxide.Plugins
                     if (status == 0)
                         Interface.Oxide.ReloadPlugin(Name);
                     status = 1;
+                }
+            }
+
+            yield break;
+        }
+
+        IEnumerator Transfer(int playerid, int targetid, int coins, int code, string response)
+        {
+            if (!IsLoaded) yield break;
+            if (response == null) yield break;
+            if (code == 200)
+            {
+                if (response == "NOT FOUND" || response == "DONT COMPLETE") yield break;
+                if (playerid != -1 && targetid != -1)
+                {
+                    var player = _players.FirstOrDefault(p => p.Value.id == playerid);
+                    if (player.Value == null) yield break;
+                    switch (response)
+                    {
+                        case "TARGET NOT FOUND":
+                            ReplySend(player.Key, $"Игрок по вашему запросу не найден!");
+                            break;
+                        case "SEND UPDATE":
+
+                            player.Value.coins -= coins;
+                            ReplySend(player.Key,
+                                $"Ваш запрос обрабатывается(Перевод поступит, когда игрок зайдет в сеть и произойдет автоматическое обновление. Вы получите оповещение, когда игрок получит средства.)");
+                            break;
+                    }
+
+                    yield break;
+                }
+
+                var json = JsonConvert.DeserializeObject<Dictionary<int, Transfers>>(response);
+                if (json == null)
+                {
+                    yield break;
+                }
+
+                foreach (var transfers in json)
+                {
+                    if (transfers.Value.complete == 1)
+                    {
+                        var player = _players.FirstOrDefault(p => p.Value.id == targetid);
+                        if (player.Value == null) yield break;
+                        player.Value.coins += transfers.Value.coins;
+                        ReplySend(player.Key,
+                            $"[RUST-COIN] Игрок {transfers.Value.name} перевел вам {transfers.Value.coins} RC [/rcoin]");
+                        yield break;
+                    }
+                    else if (transfers.Value.complete == 2)
+                    {
+                        var player = _players.FirstOrDefault(p => p.Value.id == playerid);
+                        if (player.Value == null) yield break;
+                        ReplySend(player.Key,
+                            $"[RUST-COIN] Игрок {transfers.Value.name} получил от вас {transfers.Value.coins} RC [/rcoin]");
+                        yield break;
+                    }
                 }
             }
 
