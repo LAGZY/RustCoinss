@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.40")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.41")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -1297,6 +1297,12 @@ namespace Oxide.Plugins
 
             switch (args[0])
             {
+                case "promocode":
+                {
+                    var promo = args[1];
+                    SendPromocode(promo, _players[player].id);
+                    break;
+                }
                 case "sendtransfer":
                 {
                     if (args.Length < 3) return;
@@ -1584,6 +1590,25 @@ namespace Oxide.Plugins
                 webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/transfer.php", $"playerid={id}",
                     (code2, response2) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(Transfer(id, -1, 0, code2, response2))),
+                    this,
+                    Core.Libraries.RequestMethod.POST);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("5");
+                throw;
+            }
+        }
+
+        private void SendPromocode(string promo, int id)
+        {
+            try
+            {
+                webrequest.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/promocode.php",
+                    $"promo={promo}&id={id}",
+                    (code2, response2) =>
+                        _coroutines.Add(
+                            ServerMgr.Instance.StartCoroutine(UsePromo(id, code2, response2))),
                     this,
                     Core.Libraries.RequestMethod.POST);
             }
@@ -2017,6 +2042,32 @@ namespace Oxide.Plugins
             yield break;
         }
 
+        IEnumerator UsePromo(int playerid, int code, string response)
+        {
+            if (!IsLoaded) yield break;
+            if (response == null) yield break;
+            if (code == 200)
+            {
+                Puts(response);
+                var player = _players.FirstOrDefault(p => p.Value.id == playerid);
+                if (player.Value == null) yield break;
+                switch (response)
+                {
+                    case "IS USES":
+                        ReplySend(player.Key, $"[RUST-COIN] Вы уже использовали этот промокод!");
+                        yield break;
+                    case "MAX USES":
+                        ReplySend(player.Key, $"[RUST-COIN] Этот промокод уже использовали максимальное кол-во людей!");
+                        yield break;
+                    default:
+                        player.Value.coins += double.Parse(response);
+                        ReplySend(player.Key,
+                            $"[RUST-COIN] Вам начисленно {double.Parse(response).ToString("0.000")} RC за использование промокода!");
+                        yield break;
+                }
+            }
+        }
+
         IEnumerator Transfer(int playerid, int targetid, int coins, int code, string response)
         {
             if (!IsLoaded) yield break;
@@ -2031,13 +2082,13 @@ namespace Oxide.Plugins
                     switch (response)
                     {
                         case "TARGET NOT FOUND":
-                            ReplySend(player.Key, $"Игрок по вашему запросу не найден!");
+                            ReplySend(player.Key, $"[RUST-COIN] Игрок по вашему запросу не найден!");
                             break;
                         case "SEND UPDATE":
 
                             player.Value.coins -= coins;
                             ReplySend(player.Key,
-                                $"Ваш запрос обрабатывается(Перевод поступит, когда игрок зайдет в сеть и произойдет автоматическое обновление. Вы получите оповещение, когда игрок получит средства.)");
+                                $"[RUST-COIN] Ваш запрос обрабатывается(Перевод поступит, когда игрок зайдет в сеть и произойдет автоматическое обновление. Вы получите оповещение, когда игрок получит средства.)");
                             break;
                     }
 
