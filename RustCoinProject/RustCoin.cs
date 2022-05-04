@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.43")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.44")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -1294,7 +1294,7 @@ namespace Oxide.Plugins
         {
             if (args.Length < 1) return;
             BasePlayer player = user.Object as BasePlayer;
-            var promo = args[1];
+            var promo = args[0];
             SendPromocode(promo, _players[player].id);
         }
 
