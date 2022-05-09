@@ -1911,7 +1911,7 @@ namespace Oxide.Plugins
             {
                 info.upgrades[key] = upgradelvl + 1;
             }
-        }
+        } 
 
         private void StatusCheck()
         {
