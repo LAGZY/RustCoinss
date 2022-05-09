@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Facepunch.Extend;
 using Newtonsoft.Json;
 using Oxide.Core;
@@ -14,7 +15,7 @@ using UnityEngine.UI;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.47")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.48")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
@@ -49,18 +50,15 @@ namespace Oxide.Plugins
 
         private void Unload()
         {
-            
+            UpdateMysql();
+            Debug.LogWarning("Плагин выгружается.");
+            test.Shutdown();
             if (start != null) ServerMgr.Instance.StopCoroutine(start);
             foreach (var coroutine in _coroutines.ToList().Where(c => c != null))
             {
                 ServerMgr.Instance.StopCoroutine(coroutine);
             }
-
-            foreach (var basePlayer in BasePlayer.activePlayerList)
-            {
-                OnPlayerDisconnected(basePlayer);
-            }
-            test.Shutdown();
+            Debug.LogWarning("Плагин успешно выгружен.");
         }
 
         public string main_back = "https://imgur.com/gxOM6f8.png";
@@ -1523,7 +1521,6 @@ namespace Oxide.Plugins
             DataPlayer t;
 
             if (!_players.TryGetValue(player, out t)) return;
-            Debug.Log("5");
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "closebutton");
             string top;
@@ -1917,7 +1914,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/status.php", $"",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/status.php", $"",
                     (code2, response2) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(CheckStatus(code2, response2))), this,
                     Core.Libraries.RequestMethod.POST);
@@ -1933,7 +1930,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/transfer.php", $"targetid={id}",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/transfer.php", $"targetid={id}",
                     (code2, response2) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(Transfer(-1, id, 0, code2, response2))),
                     this,
@@ -1950,7 +1947,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/transfer.php", $"playerid={id}",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/transfer.php", $"playerid={id}",
                     (code2, response2) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(Transfer(id, -1, 0, code2, response2))),
                     this,
@@ -1967,7 +1964,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/promocode.php",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/promocode.php",
                     $"promo={promo}&id={id}",
                     (code2, response2) =>
                         _coroutines.Add(
@@ -1986,7 +1983,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/transfer.php",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/transfer.php",
                     $"playerid={playerid}&targetid={targetid}&coins={coins}",
                     (code2, response2) =>
                         _coroutines.Add(
@@ -2005,7 +2002,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/upgrades.php", $"",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/upgrades.php", $"",
                     (code2, response2) => _coroutines.Add(ServerMgr.Instance.StartCoroutine(UpInfo(code2, response2))),
                     this,
                     Core.Libraries.RequestMethod.POST);
@@ -2021,7 +2018,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/servers.php",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/servers.php",
                     $"ip={Uri.EscapeDataString(ConVar.Server.ip)}&port={ConVar.Server.port.ToString()}&name={Uri.EscapeDataString(ConVar.Server.hostname)}&coins={coins}",
                     (code2, response2) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2))), this,
@@ -2038,7 +2035,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/selectserver.php",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/selectserver.php",
                     $"ip={Uri.EscapeDataString(ConVar.Server.ip)}&port={ConVar.Server.port.ToString()}",
                     (code2, response2) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2))), this,
@@ -2055,7 +2052,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/update.php",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/update.php",
                     $"steamid={player.userID}&name={Uri.EscapeDataString(player.displayName)}&coins={coin}&serverid={serverid}&upgrades={JsonConvert.SerializeObject(upgrades)}",
                     (code2, response2) => { }, this,
                     Core.Libraries.RequestMethod.POST);
@@ -2071,7 +2068,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/getinfo.php", $"steamid={player.userID}",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/getinfo.php", $"steamid={player.userID}",
                     (code, response) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(GetInfo(player, code, response))), this,
                     Core.Libraries.RequestMethod.POST);
@@ -2087,7 +2084,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"steamid={player.userID}",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/top.php", $"steamid={player.userID}",
                     (code, response) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(TopPlayer(player, code, response))), this,
                     Core.Libraries.RequestMethod.POST);
@@ -2103,7 +2100,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"max=8",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/top.php", $"max=8",
                     (code, response) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(AllPlayersTops(null, code, response))), this,
                     Core.Libraries.RequestMethod.POST);
@@ -2119,7 +2116,7 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://lagzya.foxplugins.ru/rustcoin/top.php", $"id={serverId}&max=8",
+                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/top.php", $"id={serverId}&max=8",
                     (code, response) =>
                         _coroutines.Add(ServerMgr.Instance.StartCoroutine(TopPlayer(null, code, response))), this,
                     Core.Libraries.RequestMethod.POST);
@@ -2422,6 +2419,9 @@ namespace Oxide.Plugins
                 if (player.Value == null) yield break;
                 switch (response)
                 {
+                    case "NOT FOUND":
+                        ReplySend(player.Key, $"[RUST-COIN] Такого промокода не существует!");
+                        yield break;
                     case "IS USES":
                         ReplySend(player.Key, $"[RUST-COIN] Вы уже использовали этот промокод!");
                         yield break;
@@ -2529,7 +2529,6 @@ namespace Oxide.Plugins
             if (response == null) yield break;
             if (code == 200)
             {
-                Debug.Log(response);
                 if (response == "test")
                 {
                     Update(player, 0, serverId, new Dictionary<int, int>());
