@@ -75,6 +75,7 @@ namespace Oxide.Plugins
         public string global_servers = "https://imgur.com/Z7k6n5B.png";
         public string transfer_main = "https://imgur.com/oNn09N4.png";
         public string upperbuttons = "https://imgur.com/z8DkjBB.png";
+        public string promo_main = "https://imgur.com/oZXxwL1.png";
 
         private Coroutine start;
 
@@ -104,8 +105,9 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage", global_servers, global_servers);
             ImageLibrary.Call("AddImage",transfer_main, transfer_main);
             ImageLibrary.Call("AddImage", upperbuttons, upperbuttons);
-
-            AddCovalenceCommand("rcpromo", nameof(UsePromocode));
+            ImageLibrary.Call("AddImage", promo_main, promo_main);
+            
+            
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
             Generate();
         }
@@ -126,6 +128,7 @@ namespace Oxide.Plugins
         private string top_json_all;
         private string top_json_server;
         private string transfer_json;
+        private string promocodes_json;
 
         #endregion
 
@@ -436,9 +439,18 @@ namespace Oxide.Plugins
             {
                 RectTransform =
                 {
-                    AnchorMin = "",
+                    AnchorMin = "0 0.5",
+                    AnchorMax = "0 0.5",
+                    OffsetMin = "7 -10",
+                    OffsetMax = "90 10"
                     
                 },
+                Button =
+                {
+                    Color = "0 0 0 0",
+                    Command = "RCOIN_CONS OPEN PROMO"
+                },
+                Text = { Text = ""}
             }, "UPPER_BUTTONS");
 
             main_balance_gui.Add(new CuiLabel
@@ -712,6 +724,7 @@ namespace Oxide.Plugins
             upgrades_json = upgrades_main.ToJson();
             upgrade_plate_json = upgrade_plate.ToJson();
             upgarde_slot_json = upgrade_slot.ToJson();
+            GenratePromocodes();
         }
 
         void GenerateTop()
@@ -1424,6 +1437,81 @@ namespace Oxide.Plugins
             transfer_json = transfer.ToJson();
 
         }
+
+        void GenratePromocodes()
+        {
+            CuiElementContainer promo = new CuiElementContainer();
+            promo.Add(new CuiPanel
+            {
+                CursorEnabled = true,
+                RectTransform =
+                {
+                    AnchorMin = "1 0.5",
+                    AnchorMax = "1 0.5",
+                    OffsetMin = "-300 -216",
+                    OffsetMax = "-50 216"
+                },
+                Image =
+                {
+                    Color = "0, 0, 0, 0"
+                }
+            },"closebutton", "promo");
+            promo.Add(new CuiElement
+            {   
+                Parent = "promo",
+                Name = "promo_plate",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(promo_main),
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0 0",
+                        AnchorMax = "1 1"
+                    }
+                }
+            });
+            promo.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0 1",
+                    AnchorMax = "0 1",
+                    OffsetMin = "30 -40",
+                    OffsetMax = "70 -10"
+                },
+                Text = {Text = ""},
+                Button =
+                {
+                    Color = "0 0 0 0",
+                    Command = "RCOIN_CONS HOME"
+                }
+            },"promo_plate");
+            promo.Add(new CuiElement
+            {
+                Parent = "promo_plate",
+                Components =
+                {
+                    new CuiInputFieldComponent
+                    {
+                        Align = TextAnchor.MiddleCenter,
+                        Command = "RCOIN_CONS promocode ",
+                        LineType = InputField.LineType.SingleLine
+                    }, 
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0.5",
+                        AnchorMax = "0.5 0.5",
+                        OffsetMin = "-74 45",
+                        OffsetMax = "70 73"
+                        
+                    }
+                }
+            });
+            promocodes_json = promo.ToJson();
+        }
         
         [ChatCommand("rcoin")]
         void OpenMenu(BasePlayer player)
@@ -1472,13 +1560,7 @@ namespace Oxide.Plugins
         private string GetImage(string shortname, ulong skin = 0) =>
             (string) ImageLibrary.Call("GetImage", shortname, skin);
 
-        void UsePromocode(IPlayer user, string command, string[] args)
-        {
-            if (args.Length < 1) return;
-            BasePlayer player = user.Object as BasePlayer;
-            var promo = args[0];
-            SendPromocode(promo, _players[player].id);
-        }
+        
 
         void Commands(IPlayer user, string command, string[] args)
         {
@@ -1700,6 +1782,16 @@ namespace Oxide.Plugins
                                 new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
                                 transfer_json.Replace(
                                     "[BALANCE]", t.coins.ToString("0.000")));
+                            break;
+                        }
+                        case "PROMO":
+                        {
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI",
+                                "main");
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                promocodes_json);
                             break;
                         }
                     }
@@ -2337,6 +2429,7 @@ namespace Oxide.Plugins
                         coins += double.Parse(response);
                         ReplySend(player.Key,
                             $"[RUST-COIN] Вам начисленно {double.Parse(response).ToString("0.000")} RC за использование промокода!");
+                        OpenMenu(player.Key);
                         yield break;
                 }
             }
