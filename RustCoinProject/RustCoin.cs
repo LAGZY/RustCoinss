@@ -74,6 +74,7 @@ namespace Oxide.Plugins
         public string global_players = "https://imgur.com/KXk2pQ6.png";
         public string global_servers = "https://imgur.com/Z7k6n5B.png";
         public string transfer_main = "https://imgur.com/oNn09N4.png";
+        public string upperbuttons = "https://imgur.com/z8DkjBB.png";
 
         private Coroutine start;
 
@@ -102,6 +103,7 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage", global_players, global_players); 
             ImageLibrary.Call("AddImage", global_servers, global_servers);
             ImageLibrary.Call("AddImage",transfer_main, transfer_main);
+            ImageLibrary.Call("AddImage", upperbuttons, upperbuttons);
 
             AddCovalenceCommand("rcpromo", nameof(UsePromocode));
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
@@ -411,6 +413,33 @@ namespace Oxide.Plugins
                 },
                 Text = {Text = ""}
             }, "Phone");
+            main.Add(new CuiElement
+            {
+                Parent = "Phone",
+                Name = "UPPER_BUTTONS",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(upperbuttons)
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0.5",
+                        AnchorMax = "0.5 0.5",
+                        OffsetMin = "-95 -130",
+                        OffsetMax = "90 -95"
+                    }
+                }
+            });
+            main.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMin = "",
+                    
+                },
+            }, "UPPER_BUTTONS");
 
             main_balance_gui.Add(new CuiLabel
             {
@@ -1586,8 +1615,9 @@ namespace Oxide.Plugins
                             );
                             int i = 0;
 
-                            foreach (var x in _upgrades.Where(p => p.Value.isvisible).Skip(page * 6).Take(6))
+                            foreach (var x in _upgrades.Skip(page * 6).Take(6))
                             {
+                                if(!x.Value.isvisible) continue;
                                 int lvl = t.upgrades.ContainsKey(x.Value.id) ? t.upgrades[x.Value.id] : 0;
                                 var image = GetImage(x.Value.url);
                                 CommunityEntity.ServerInstance.ClientRPCEx(
