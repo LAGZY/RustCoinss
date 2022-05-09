@@ -13,7 +13,7 @@ using UnityEngine.UI;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.44")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.45")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
