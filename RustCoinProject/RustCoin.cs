@@ -60,7 +60,7 @@ namespace Oxide.Plugins
             {
                 OnPlayerDisconnected(basePlayer);
             }
-         
+            test.Shutdown();
         }
 
         public string main_back = "https://imgur.com/gxOM6f8.png";
