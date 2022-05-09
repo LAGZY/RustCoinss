@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,7 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Rust.Cui;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Oxide.Plugins
 {
@@ -72,6 +73,7 @@ namespace Oxide.Plugins
         public string server_players = "https://imgur.com/szQgcre.png";
         public string global_players = "https://imgur.com/KXk2pQ6.png";
         public string global_servers = "https://imgur.com/Z7k6n5B.png";
+        public string transfer_main = "https://imgur.com/oNn09N4.png";
 
         private Coroutine start;
 
@@ -86,19 +88,20 @@ namespace Oxide.Plugins
                 Unload();
             }
 
-            ImageLibrary.Call("AddImage", main_back, main_back); //main_background
-            ImageLibrary.Call("AddImage", main_border, main_border); //main_border
-            ImageLibrary.Call("AddImage", main_tap, main_tap); //main_tap
-            ImageLibrary.Call("AddImage", main_balance, main_balance); //main_balik
-            ImageLibrary.Call("AddImage", main_buttons, main_buttons); //main_buttons
-            ImageLibrary.Call("AddImage", main_phone, main_phone); //main_phone
-            ImageLibrary.Call("AddImage", main_upgrades, main_upgrades); //main_upgrades
-            ImageLibrary.Call("AddImage", upgrade_backimage, upgrade_backimage); //upgrade_backimage
-            ImageLibrary.Call("AddImage", main_top, main_top); //main_top
-            ImageLibrary.Call("AddImage", avatar_rc, avatar_rc); //main_top
-            ImageLibrary.Call("AddImage", server_players, server_players); //main_top
-            ImageLibrary.Call("AddImage", global_players, global_players); //main_top
-            ImageLibrary.Call("AddImage", global_servers, global_servers); //main_top
+            ImageLibrary.Call("AddImage", main_back, main_back); 
+            ImageLibrary.Call("AddImage", main_border, main_border); 
+            ImageLibrary.Call("AddImage", main_tap, main_tap); 
+            ImageLibrary.Call("AddImage", main_balance, main_balance); 
+            ImageLibrary.Call("AddImage", main_buttons, main_buttons); 
+            ImageLibrary.Call("AddImage", main_phone, main_phone); 
+            ImageLibrary.Call("AddImage", main_upgrades, main_upgrades); 
+            ImageLibrary.Call("AddImage", upgrade_backimage, upgrade_backimage);
+            ImageLibrary.Call("AddImage", main_top, main_top); 
+            ImageLibrary.Call("AddImage", avatar_rc, avatar_rc); 
+            ImageLibrary.Call("AddImage", server_players, server_players); 
+            ImageLibrary.Call("AddImage", global_players, global_players); 
+            ImageLibrary.Call("AddImage", global_servers, global_servers);
+            ImageLibrary.Call("AddImage",transfer_main, transfer_main);
 
             AddCovalenceCommand("rcpromo", nameof(UsePromocode));
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
@@ -120,6 +123,7 @@ namespace Oxide.Plugins
         private string upgarde_slot_json;
         private string top_json_all;
         private string top_json_server;
+        private string transfer_json;
 
         #endregion
 
@@ -391,6 +395,22 @@ namespace Oxide.Plugins
                 },
                 Text = {Text = ""}
             }, "Phone");
+            main.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 0",
+                    AnchorMax = "0.5 0",
+                    OffsetMin = "30 20",
+                    OffsetMax = "90 75"
+                },
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS OPEN TRANSFER"
+                },
+                Text = {Text = ""}
+            }, "Phone");
 
             main_balance_gui.Add(new CuiLabel
             {
@@ -412,6 +432,7 @@ namespace Oxide.Plugins
             main_json = main.ToJson();
 
             main_balance_gui_json = main_balance_gui.ToJson();
+            GenerateTransfer();
         }
 
         private List<Coroutine> _coroutines = new List<Coroutine>();
@@ -793,7 +814,7 @@ namespace Oxide.Plugins
                     },
                     Text =
                     {
-                        Text = x.id.ToString("0000"),
+                        Text = x.id.ToString("00000"),
                         Align = TextAnchor.MiddleCenter,
                         FontSize = 10,
                     }
@@ -1079,7 +1100,7 @@ namespace Oxide.Plugins
                     },
                     Text =
                     {
-                        Text = x.id.ToString("0000"),
+                        Text = x.id.ToString("00000"),
                         Align = TextAnchor.MiddleCenter,
                         FontSize = 10,
                     }
@@ -1242,7 +1263,139 @@ namespace Oxide.Plugins
             top_json_server = top_plate_server.ToJson();
         }
 
+        void GenerateTransfer()
+        {
+            CuiElementContainer transfer = new CuiElementContainer();
+            transfer.Add(new CuiPanel
+            {
+                CursorEnabled = true,
+                
+                RectTransform =
+                {
+                    AnchorMin = "1 0.5",
+                    AnchorMax = "1 0.5",
+                    OffsetMin = "-300 -216",
+                    OffsetMax = "-50 216"
+                },
+                Image = {Color = "0 0 0 0"}
+            }, "closebutton", "Transfer_main");
+            transfer.Add(new CuiElement
+            {
+                Parent = "Transfer_main",
+                Name = "Transfer_plate",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(transfer_main)
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0 0",
+                        AnchorMax = "1 1"
+                    }
+                }
+            });
+            transfer.Add(new CuiButton
+            {
+            RectTransform =
+            {
+                AnchorMin = "0 1",
+                AnchorMax = "0 1",
+                OffsetMin = "30 -40",
+                OffsetMax = "70 -10"
+            },
+            Text = {Text = ""},
+            Button =
+            {
+                Color = "0 0 0 0", 
+                Command = "RCOIN_CONS HOME"
+            }
+            },"Transfer_plate");
+            transfer.Add(new CuiLabel
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 1",
+                    AnchorMax = "0.5 1",
+                    OffsetMin = "-70 -137",
+                    OffsetMax = "37 -113"
+                },
+                Text =
+                {
+                    Align = TextAnchor.MiddleCenter,
+                    Text = "[BALANCE]"
+                }
+                
+            },"Transfer_plate");
+            transfer.Add(new CuiElement
+            {
+                Parent = "Transfer_plate",
+                Components =
+                {
+                    new CuiInputFieldComponent
+                    {
+                        LineType = InputField.LineType.MultiLineSubmit,
+                        Align = TextAnchor.MiddleCenter,
+                        CharsLimit = 5,
+                        Command = "RCOIN_CONS TRANSFER addid "
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0.5",
+                        AnchorMax = "0.5 0.5",
+                        OffsetMin = "-75 -10",
+                        OffsetMax = "70 20"
+                    }
+                }
+            });
+            
+            transfer.Add(new CuiElement
+            {
+                Parent = "Transfer_plate",
+                Components =
+                {
+                    new CuiInputFieldComponent
+                    {
+                        Command = "RCOIN_CONS TRANSFER addamount ",
+                        LineType = InputField.LineType.MultiLineSubmit,
+                        Align = TextAnchor.MiddleCenter,
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0.5",
+                        AnchorMax = "0.5 0.5",
+                        OffsetMin = "-75 -80",
+                        OffsetMax = "70 -50"
+                    }
+                }
+            });
+            transfer.Add(new CuiButton
+            {
+                
+                    Button = 
+                    {
+                        Color  = "0 0 0 0",
+                        Command = "RCOIN_CONS TRANSFER sendtransfer"
+                    },
+                    RectTransform = 
+                    {
+                        AnchorMin = "0.5 0.5",
+                        AnchorMax = "0.5 0.5",
+                        OffsetMin = "-50 -134",
+                        OffsetMax = "45 -105"
+                    },
+                    Text = { Text = ""}
+                
+            },"Transfer_plate");
+            
+            
+            
+            
+            transfer_json = transfer.ToJson();
 
+        }
+        
         [ChatCommand("rcoin")]
         void OpenMenu(BasePlayer player)
         {
@@ -1259,7 +1412,7 @@ namespace Oxide.Plugins
             string jsonSend = main_json
                 .Replace("[MAIN_AVATAR]", avatar)
                 .Replace("[NICKNAME]", player.displayName)
-                .Replace("[ID]", t.id.ToString("0000"))
+                .Replace("[ID]", t.id.ToString("00000"))
                 .Replace("[BALANCE]", t.coins.ToString("0.000"))
                 .Replace("[TOP_POSITION]", top);
 
@@ -1310,34 +1463,88 @@ namespace Oxide.Plugins
                     SendPromocode(promo, _players[player].id);
                     break;
                 }
-                case "sendtransfer":
+                case "TRANSFER":
                 {
-                    if (args.Length < 3) return;
-                    var targetid = args[1].ToInt();
-                    var coins = args[2].ToInt();
-                    if (coins < 1)
+                    switch (args[1])
                     {
-                        ReplySend(player, "[RUST-COIN] Че умный дохуя?!");
-                        return;
+                        case "sendtransfer":
+                        {
+                            
+                            TranferSendInfo ti;
+                            if (!_transferInfo.TryGetValue(player.userID, out ti))
+                            {
+                                ReplySend(player, "[RUST-COIN] Что то пошло не так.... Попробуйте снова.");
+                                return;
+                            }
+                            
+                            var targetid = _transferInfo[player.userID].id;
+                            var coins = _transferInfo[player.userID].ammount;
+
+                            if (coins < 1)
+                            {
+                                ReplySend(player,
+                                    "[RUST-COIN] Че умный дохуя?!"); //ХАХАХАХАХААХАХАХАХАХАХААХААХАХХ ебать уГар ыыыыыыыыыы, типо еблан чел кидать меньше коина, ну да разрывная аХуЕТЬ -_-
+                                return;
+                            }
+
+                            if (_players[player].id == targetid)
+                            {
+                                ReplySend(player, "[RUST-COIN] Нельзя переводить самому себе!");
+                                return;
+                            }
+
+                            if (_players[player].coins < coins)
+                            {
+                                ReplySend(player, "[RUST-COIN] У вас не достаточно средств!");
+                                return;
+                            }
+
+                            SendTransfer(_players[player].id, targetid, coins);
+                            _transferInfo.Remove(player.userID);
+                            timer.Once(0.5f, () => rust.RunClientCommand(player, "RCOIN_CONS OPEN HOME"));
+                            
+                            break;
+                        }
+                        case "addid":
+                        {
+                            if(args.Length < 3) return;
+                            
+                            TranferSendInfo ti;
+                            if (!_transferInfo.TryGetValue(player.userID, out ti)) return;
+
+                            if (!int.TryParse(args[2], out ti.id))
+                            {
+                                ReplySend(player, "[RUST-COIN] Некорректно введен RCOIN ID!");
+                                return;
+                            }
+
+                            
+                            break;
+                        }
+                        case "addamount":
+                        {
+                            if(args.Length < 3) return;
+                            
+                            TranferSendInfo ti;
+                            if (!_transferInfo.TryGetValue(player.userID, out ti)) return;
+                            
+
+                            if (!int.TryParse(args[2], out ti.ammount))
+                            {
+                                ReplySend(player, "[RUST-COIN] Некорректно введена сумма!");
+                                return;
+                            }
+                            
+                            break;
+                        }
                     }
 
-                    if (_players[player].id == targetid)
-                    {
-                        ReplySend(player, "[RUST-COIN] Нельзя переводить самому себе!");
-                        return;
-                    }
-
-                    if (_players[player].coins < coins)
-                    {
-                        ReplySend(player, "[RUST-COIN] У вас не достаточно средств!");
-                        return;
-                    }
-
-                    SendTransfer(_players[player].id, targetid, coins);
                     break;
                 }
+                
                 case "main_close":
                 {
+                    _transferInfo.Remove(player.userID);
                     _openInterface.Remove(player);
                     CommunityEntity.ServerInstance.ClientRPCEx(
                         new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "closebutton");
@@ -1440,6 +1647,29 @@ namespace Oxide.Plugins
                                 }
                             }
 
+                            break;
+                        }
+                        case "TRANSFER":
+                        {
+                            if (!_transferInfo.ContainsKey(player.userID))
+                            { 
+                                _transferInfo.Add(player.userID, new TranferSendInfo());
+                            }
+                            
+                            DataPlayer t;
+                            if (!_players.TryGetValue(player, out t)) return;
+                            
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI",
+                                "main");
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI",
+                                "Transfer_main");
+                            
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                transfer_json.Replace(
+                                    "[BALANCE]", t.coins.ToString("0.000")));
                             break;
                         }
                     }
@@ -1857,6 +2087,13 @@ namespace Oxide.Plugins
             public int status;
         }
 
+        private Dictionary<ulong, TranferSendInfo> _transferInfo = new Dictionary<ulong, TranferSendInfo>();
+        class TranferSendInfo
+        {
+            public int id;
+            public int ammount;
+
+        }
         class InterfaceInfo
         {
             public string Interface;
