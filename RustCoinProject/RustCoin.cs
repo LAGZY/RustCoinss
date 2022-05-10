@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Facepunch.Extend;
 using Newtonsoft.Json;
 using Oxide.Core;
@@ -15,11 +14,83 @@ using UnityEngine.UI;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.48")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.49")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
+        
+        
+        
+        #region Configuration
+        private static Configuration _config = new Configuration();
 
+        public class Configuration
+        {
+            [JsonProperty("Включить товары на сервере?")]
+            public bool isShopWorking { get; set; } = false;
+
+            [JsonProperty("Товары на сервере")] 
+            public Dictionary<int, Shop> Tovars = new Dictionary<int,Shop>();
+
+            public class Shop
+            {
+                [JsonProperty("Картинка")] public string Image;
+                [JsonProperty("Название")] public string Name;
+                [JsonProperty("Цена")] public double Cost;
+                [JsonProperty("Исполняемая команда([STEAMID] будет заменено на ID купившего)")] public string Command;
+            }
+
+            public static Configuration GetNewConfiguration()
+            {
+                return new Configuration
+                {
+                    Tovars = new Dictionary<int, Shop>
+                    {
+                        {
+                            1, new Shop
+                            {
+                                Image = "https://imgur.com/B846zP5.png",
+                                Name = "VIP",
+                                Cost = 4000.01,
+                                Command = "say [STEAMID] красавчик"
+                            }
+                        },
+                        {
+                            2, new Shop
+                            {
+                                Image = "https://imgur.com/B846zP5.png",
+                                Name = "PREM",
+                                Cost = 80000.1,
+                                Command = "say [STEAMID] мегакрасавчик"
+                            }
+                        }
+                    }
+                };
+            }
+        }
+
+        protected override void LoadConfig()
+        {
+            base.LoadConfig();
+            try
+            {
+                _config = Config.ReadObject<Configuration>();
+                if (_config == null) LoadDefaultConfig();
+            }
+            catch
+            {
+                Puts("!!!!ОШИБКА КОНФИГУРАЦИИ!!!! Проверьте парамеры конфига!");
+            }
+
+            NextTick(SaveConfig);
+        }
+
+        protected override void LoadDefaultConfig() => _config = Configuration.GetNewConfiguration();
+        protected override void SaveConfig() => Config.WriteObject(_config);
+
+        #endregion
+        
+        
         #region Hooks
 
         private void OnPlayerConnected(BasePlayer player) 
@@ -77,6 +148,8 @@ namespace Oxide.Plugins
         public string transfer_main = "https://imgur.com/oNn09N4.png";
         public string upperbuttons = "https://imgur.com/z8DkjBB.png";
         public string promo_main = "https://imgur.com/oZXxwL1.png";
+        public string shop_main = "https://imgur.com/1uaFQMX.png";
+        public string shop_slotimg = "https://imgur.com/m9bqNN8.png";
 
         private Coroutine start;
         private WebRequests test = new WebRequests();
@@ -87,10 +160,18 @@ namespace Oxide.Plugins
             start = ServerMgr.Instance.StartCoroutine(UpdateMysql());
             if (!ImageLibrary)
             {
-                Debug.LogError("ImageLibrary не установлена!!! Плагин работать не будет!!");
+                Debug.LogError("[RUST-COIN] ImageLibrary не установлена!!! Плагин работать не будет!!");
                 Interface.Oxide.UnloadPlugin(Name);
             }
- 
+
+            if (_config.isShopWorking)
+            {
+                foreach (Configuration.Shop shp in _config.Tovars.Values)
+                {
+                    ImageLibrary.Call("AddImage", shp.Image, shp.Image);
+                }
+            }
+           
             ImageLibrary.Call("AddImage", main_back, main_back); 
             ImageLibrary.Call("AddImage", main_border, main_border); 
             ImageLibrary.Call("AddImage", main_tap, main_tap); 
@@ -107,7 +188,8 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage",transfer_main, transfer_main);
             ImageLibrary.Call("AddImage", upperbuttons, upperbuttons);
             ImageLibrary.Call("AddImage", promo_main, promo_main);
-            
+            ImageLibrary.Call("AddImage", shop_main, shop_main);
+            ImageLibrary.Call("AddImage", shop_slotimg, shop_slotimg);
             
             
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
@@ -131,7 +213,8 @@ namespace Oxide.Plugins
         private string top_json_server;
         private string transfer_json;
         private string promocodes_json;
-
+        private string shop_json;
+        private string shop_slot_json;
         #endregion
 
         void Generate()
@@ -451,6 +534,23 @@ namespace Oxide.Plugins
                 {
                     Color = "0 0 0 0",
                     Command = "RCOIN_CONS OPEN PROMO"
+                },
+                Text = { Text = ""}
+            }, "UPPER_BUTTONS");
+            main.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMin = "1 0.5",
+                    AnchorMax = "1 0.5",
+                    OffsetMin = "-90 -10",
+                    OffsetMax = "-5 10"
+                    
+                },
+                Button =
+                {
+                    Color = "0 0 0 0",
+                    Command = "RCOIN_CONS OPEN SHOP 0"
                 },
                 Text = { Text = ""}
             }, "UPPER_BUTTONS");
@@ -1513,6 +1613,199 @@ namespace Oxide.Plugins
                 }
             });
             promocodes_json = promo.ToJson();
+            GenerateShop();
+        }
+
+        void GenerateShop()
+        {
+            CuiElementContainer shop = new CuiElementContainer();
+            CuiElementContainer shop_slot = new CuiElementContainer();
+            shop.Add(new CuiPanel
+            {
+                CursorEnabled = true,
+                RectTransform =
+                {
+                    AnchorMin = "1 0.5",
+                    AnchorMax = "1 0.5",
+                    OffsetMin = "-300 -216",
+                    OffsetMax = "-50 216"
+                },
+                Image =
+                {
+                    Color = "0, 0, 0, 0"
+                }
+            },"closebutton", "shop");
+            shop.Add(new CuiElement
+            {
+                Parent = "shop",
+                Name = "shop_slots_plate",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(shop_main),
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0 0",
+                        AnchorMax = "1 1"
+                    }
+                }
+            });
+            shop.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMin = "1 0",
+                    AnchorMax = "1 0",
+                    OffsetMin = "-70 15",
+                    OffsetMax = "-30 45"
+                },
+                Text = {Text = ""},
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS OPEN SHOP [PAGE_NEXT]",
+                }
+            },"shop_slots_plate");
+            shop.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0 0",
+                    AnchorMax = "0 0",
+                    OffsetMin = "25 15",
+                    OffsetMax = "65 50"
+                },
+                Text = {Text = ""},
+                Button =
+                {
+                    Color = "0, 0, 0, 0",
+                    Command = "RCOIN_CONS OPEN SHOP [PAGE_PREV]",
+                }
+            }, "shop_slots_plate");
+            shop.Add(new CuiButton
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0 1",
+                    AnchorMax = "0 1",
+                    OffsetMin = "30 -40",
+                    OffsetMax = "70 -10"
+                },
+                Text = {Text = ""},
+                Button =
+                {
+                    Color = "0 0 0 0",
+                    Command = "RCOIN_CONS HOME"
+                }
+            },"shop_slots_plate");
+            shop.Add(new CuiLabel
+            {
+                Text =
+                {
+                    Text = "[PAGE_NEXT]",
+                    Align = TextAnchor.MiddleCenter,
+                    FontSize = 18
+                },
+                RectTransform =
+                {
+                    AnchorMin = "0.5 0",
+                    AnchorMax = "0.5 0",
+                    OffsetMin = "-20 15",
+                    OffsetMax = "20 47"
+                }
+            }, "shop_slots_plate");
+            shop_slot.Add(new CuiPanel
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 1",
+                    AnchorMax = "0.5 1",
+                    OffsetMin = "[OMIN]",
+                    OffsetMax = "[OMAX]"
+                },
+                Image = {Color = "0 0 0 0"}
+            }, "shop_slots_plate", "shop_element[ENC]");
+            shop_slot.Add(new CuiElement
+            {
+                Parent = "shop_element[ENC]",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = "[IMAGE]"
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0 0.5",
+                        AnchorMax = "0 0.5",
+                        OffsetMin = "8 -14",
+                        OffsetMax = "36 13"
+                    }
+                }
+            });
+            shop_slot.Add(new CuiElement
+            {
+                Parent = "shop_element[ENC]",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(shop_slotimg)
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0 0",
+                        AnchorMax = "1 1",
+                      
+                    }
+                }
+            });
+            shop_slot.Add(new CuiLabel
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 1",
+                    AnchorMax = "0.5 1",
+                    OffsetMin = "-45 -20",
+                    OffsetMax = "70 -5"
+                },
+                Text =
+                {
+                    Align = TextAnchor.MiddleCenter,
+                    Text = "[NAME]",
+                    FontSize = 12
+                }
+            }, "shop_element[ENC]");
+            shop_slot.Add(new CuiLabel
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 0",
+                    AnchorMax = "0.5 0",
+                    OffsetMin = "-6 5",
+                    OffsetMax = "58 23"
+                },
+                Text =
+                {
+                    Align = TextAnchor.MiddleCenter,
+                    Text = "[COST]",
+                    FontSize = 12
+                }
+            }, "shop_element[ENC]");
+            shop_slot.Add(new CuiButton
+            {
+                Text = { Text = ""},
+                RectTransform =
+                {
+                    AnchorMin = "0 0",
+                    AnchorMax = "1 1"
+                },
+                Button = { Command = "[COMMAND]", Color = "0 0 0 0"}
+            },"shop_element[ENC]");
+            shop_json = shop.ToJson();
+            shop_slot_json = shop_slot.ToJson();
         }
         
         [ChatCommand("rcoin")]
@@ -1571,6 +1864,7 @@ namespace Oxide.Plugins
             {
                 case "promocode":
                 {
+                    if(args.Length < 2) return;
                     var promo = args[1];
                     SendPromocode(promo, _players[player].id);
                     break;
@@ -1795,6 +2089,44 @@ namespace Oxide.Plugins
                                 promocodes_json);
                             break;
                         }
+                        case "SHOP":
+                        {
+                            if (0 >= _config.Tovars.Count - args[2].ToInt() * 6) return;
+                            if (args[2].ToInt() < 0) return;
+                            int page = args[2].ToInt();
+                            if (!_config.isShopWorking)
+                            {
+                                ReplySend(player, "[RUST-COIN] На этом сервере нет товаров!");
+                                return;
+                            }
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI",
+                                "main");
+                            CommunityEntity.ServerInstance.ClientRPCEx(
+                                new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                shop_json
+                                    .Replace("[PAGE_NEXT]", (page+1).ToString())
+                                    .Replace("[PAGE_PREV]", (page-1).ToString())
+                                );
+                            int i = 0;
+                            foreach (var shp in _config.Tovars.Skip(page * 6).Take(6))
+                            {
+                                CommunityEntity.ServerInstance.ClientRPCEx(
+                                    new Network.SendInfo {connection = player.net.connection}, null, "AddUI",
+                                    shop_slot_json
+                                        .Replace("[ENC]", i.ToString())
+                                        .Replace("[OMIN]", $"-87 {-119 - 50 * i}")
+                                        .Replace("[OMAX]", $"81 {-73 - 50 * i}")
+                                        .Replace("[IMAGE]", GetImage(shp.Value.Image))
+                                        .Replace("[NAME]", shp.Value.Name)
+                                        .Replace("[COST]", shp.Value.Cost.ToString())
+                                        .Replace("[COMMAND]", $"RCOIN_CONS SHOP_BUY {shp.Key}")
+                                    
+                                );
+                                i++;
+                            }
+                            break;
+                        }
                     }
 
                     break;
@@ -1860,6 +2192,23 @@ namespace Oxide.Plugins
                         }
                     }
 
+                    break;
+                }
+                case "SHOP_BUY":
+                {
+                    Configuration.Shop t;
+                    if(!_config.Tovars.TryGetValue(args[1].ToInt(), out t)) return;
+                    if (!RemoveMoney(player, t.Cost))
+                    {
+                        ReplySend(player, "[RUST-COIN] У вас недостаточно RC!");
+                        return;
+                    }
+                    ReplySend(player, "[RUST-COIN] Успешно!");
+                    rust.RunServerCommand(t.Command.Replace("[STEAMID]", player.UserIDString));
+                    
+                    OpenMenu(player);
+                    
+                    
                     break;
                 }
                 case "HOME":
@@ -2477,19 +2826,17 @@ namespace Oxide.Plugins
                     if (transfers.Value.complete == 1)
                     {
                         var player = _players.FirstOrDefault(p => p.Value.id == targetid);
-                        if (player.Value == null) yield break;
+                        if (player.Value == null) continue;
                         player.Value.coins += transfers.Value.coins;
                         ReplySend(player.Key,
                             $"[RUST-COIN] Игрок {transfers.Value.name} перевел вам {transfers.Value.coins} RC [/rcoin]");
-                        yield break;
                     }
                     else if (transfers.Value.complete == 2)
                     {
                         var player = _players.FirstOrDefault(p => p.Value.id == playerid);
-                        if (player.Value == null) yield break;
+                        if (player.Value == null) continue;
                         ReplySend(player.Key,
                             $"[RUST-COIN] Игрок {transfers.Value.name} получил от вас {transfers.Value.coins} RC [/rcoin]");
-                        yield break;
                     }
                 }
             }
