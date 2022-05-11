@@ -14,13 +14,13 @@ using UnityEngine.UI;
 
 namespace Oxide.Plugins
 {
-    [Info("RustCoin", "LAGZYA feat fermens and megargan", "1.0.49")]
+    [Info("RustCoin", "LAGZYA feat fermens and megargan", "2.0.8")]
     public class RustCoin : RustPlugin
     {
         [PluginReference] Plugin ImageLibrary;
-        
-        
-        
+
+
+        private bool testCoin = false;
         #region Configuration
         private static Configuration _config = new Configuration();
 
@@ -34,9 +34,13 @@ namespace Oxide.Plugins
 
             public class Shop
             {
-                [JsonProperty("Картинка")] public string Image;
+                [JsonProperty("Картинка [Если предмет без скина оставить пустым]")] public string Image;
                 [JsonProperty("Название")] public string Name;
                 [JsonProperty("Цена")] public double Cost;
+                [JsonProperty("[ПРЕДМЕТЫ] Шортнейм")] public string Shortname = "";
+                [JsonProperty("[ПРЕДМЕТЫ] СкинАйди")] public ulong SkinId;
+                [JsonProperty("[ПРЕДМЕТЫ] Кол-во")] public int amount;
+                [JsonProperty("Использовать команду?")] public bool IsCommand;
                 [JsonProperty("Исполняемая команда([STEAMID] будет заменено на ID купившего)")] public string Command;
             }
 
@@ -44,6 +48,7 @@ namespace Oxide.Plugins
             {
                 return new Configuration
                 {
+                    isShopWorking = false,
                     Tovars = new Dictionary<int, Shop>
                     {
                         {
@@ -52,6 +57,7 @@ namespace Oxide.Plugins
                                 Image = "https://imgur.com/B846zP5.png",
                                 Name = "VIP",
                                 Cost = 4000.01,
+                                IsCommand = true,
                                 Command = "say [STEAMID] красавчик"
                             }
                         },
@@ -61,6 +67,7 @@ namespace Oxide.Plugins
                                 Image = "https://imgur.com/B846zP5.png",
                                 Name = "PREM",
                                 Cost = 80000.1,
+                                IsCommand = true,
                                 Command = "say [STEAMID] мегакрасавчик"
                             }
                         }
@@ -95,28 +102,27 @@ namespace Oxide.Plugins
 
         private void OnPlayerConnected(BasePlayer player) 
         {
+            if(status == 0) return;
             GetInfos(player);
         }
 
         private void OnPlayerDisconnected(BasePlayer player)
         {
+            if(status == 0) return;
             DataPlayer info;
             if (!_players.TryGetValue(player, out info)) return;
-            Update(player, info.coins, info.serverid, info.upgrades);
+            Update(new List<DataPlayer>{info});
             _players.Remove(player);
         }
 
         private void MediumUnload()
         {
-            foreach (var coroutine in _coroutines.ToList().Where(c => c != null))
-            {
-                ServerMgr.Instance.StopCoroutine(coroutine);
-            }
-
+            ServerMgr.Instance.StopCoroutine(UpdateMysql());
             foreach (var basePlayer in BasePlayer.activePlayerList)
             {
                 OnPlayerDisconnected(basePlayer);
             }
+            
         }
 
         private void Unload()
@@ -125,10 +131,6 @@ namespace Oxide.Plugins
             Debug.LogWarning("Плагин выгружается.");
             test.Shutdown();
             if (start != null) ServerMgr.Instance.StopCoroutine(start);
-            foreach (var coroutine in _coroutines.ToList().Where(c => c != null))
-            {
-                ServerMgr.Instance.StopCoroutine(coroutine);
-            }
             Debug.LogWarning("Плагин успешно выгружен.");
         }
 
@@ -139,7 +141,7 @@ namespace Oxide.Plugins
         public string main_buttons = "https://imgur.com/EMHab4A.png";
         public string main_phone = "https://imgur.com/PDwzpbG.png";
         public string main_upgrades = "https://imgur.com/5jqO4BC.png";
-        public string upgrade_backimage = "https://imgur.com/7MFgOuM.png";
+        public string upgrade_backimage = "https://imgur.com/qasCRCd.png";
         public string main_top = "https://imgur.com/CR0T5ZL.png";
         public string avatar_rc = "https://i.imgur.com/pd0rGiP.png";
         public string server_players = "https://imgur.com/szQgcre.png";
@@ -168,7 +170,8 @@ namespace Oxide.Plugins
             {
                 foreach (Configuration.Shop shp in _config.Tovars.Values)
                 {
-                    ImageLibrary.Call("AddImage", shp.Image, shp.Image);
+                    if(shp.IsCommand || shp.SkinId !=0) ImageLibrary.Call("AddImage", shp.Image, shp.Image);
+                    else ImageLibrary.Call("AddImage", $"https://api.foxplugins.ru/items/HARDRUST-TOP1SERVERYES/{shp.Shortname}/64.png", $"rcitem[{Version}]" + shp.Shortname);
                 }
             }
            
@@ -578,7 +581,6 @@ namespace Oxide.Plugins
             GenerateTransfer();
         }
 
-        private List<Coroutine> _coroutines = new List<Coroutine>();
 
         void GenerateUpgrades()
         {
@@ -1598,6 +1600,7 @@ namespace Oxide.Plugins
                 {
                     new CuiInputFieldComponent
                     {
+                        NeedsKeyboard = true,
                         Align = TextAnchor.MiddleCenter,
                         Command = "RCOIN_CONS promocode ",
                         LineType = InputField.LineType.SingleLine
@@ -1817,7 +1820,7 @@ namespace Oxide.Plugins
             CommunityEntity.ServerInstance.ClientRPCEx(
                 new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", "closebutton");
             string top;
-            if (!_top.TryGetValue(player, out top)) top = "0";
+            if (!_top.TryGetValue(player.userID, out top)) top = "0";
 
             var avatar = GetImage(player.UserIDString);
             string jsonSend = main_json
@@ -1854,8 +1857,8 @@ namespace Oxide.Plugins
         private string GetImage(string shortname, ulong skin = 0) =>
             (string) ImageLibrary.Call("GetImage", shortname, skin);
 
-        
 
+        private Dictionary<ulong, DateTime> _lastClick = new Dictionary<ulong, DateTime>();
         void Commands(IPlayer user, string command, string[] args)
         {
             BasePlayer player = user.Object as BasePlayer;
@@ -1958,6 +1961,14 @@ namespace Oxide.Plugins
                 }
                 case "RCOIN_CLICK.MAINADD":
                 {
+                    DateTime lastClick;
+                    if (_lastClick.TryGetValue(player.userID, out lastClick))
+                    {
+                        var click = DateTime.Now - lastClick;
+                        if(click.TotalMilliseconds < 150) return;
+                        _lastClick[player.userID] = DateTime.Now;
+                    }
+                    else _lastClick[player.userID] = DateTime.Now;
                     AddMoney(player, 0.001);
                     UpdateBalance(player);
                     Effect Sound1 = new Effect("assets/bundled/prefabs/fx/notice/loot.drag.grab.fx.prefab", player, 0,
@@ -2117,7 +2128,7 @@ namespace Oxide.Plugins
                                         .Replace("[ENC]", i.ToString())
                                         .Replace("[OMIN]", $"-87 {-119 - 50 * i}")
                                         .Replace("[OMAX]", $"81 {-73 - 50 * i}")
-                                        .Replace("[IMAGE]", GetImage(shp.Value.Image))
+                                        .Replace("[IMAGE]", GetImage(shp.Value.IsCommand || shp.Value.SkinId != 0 ? shp.Value.Image : $"rcitem[{Version}]{shp.Value.Shortname}"))
                                         .Replace("[NAME]", shp.Value.Name)
                                         .Replace("[COST]", shp.Value.Cost.ToString())
                                         .Replace("[COMMAND]", $"RCOIN_CONS SHOP_BUY {shp.Key}")
@@ -2204,7 +2215,17 @@ namespace Oxide.Plugins
                         return;
                     }
                     ReplySend(player, "[RUST-COIN] Успешно!");
-                    rust.RunServerCommand(t.Command.Replace("[STEAMID]", player.UserIDString));
+                    if(t.IsCommand)
+                    {
+                        rust.RunServerCommand(t.Command.Replace("[STEAMID]", player.UserIDString));
+                    }
+                    else
+                    {
+                        var item = ItemManager.CreateByName(t.Shortname, t.amount, t.SkinId);
+                        if (!player.inventory.GiveItem(item))
+                            item.Drop(player.inventory.containerMain.dropPosition,
+                                player.inventory.containerMain.dropVelocity);
+                    }
                     
                     OpenMenu(player);
                     
@@ -2240,6 +2261,7 @@ namespace Oxide.Plugins
         private bool RemoveMoney(BasePlayer player, double coin)
         {
             DataPlayer info;
+            if (coin < 0) return false;
             if (!_players.TryGetValue(player, out info)) return false;
             if (info.coins - coin < 0) return false;
             info.coins -= coin;
@@ -2263,9 +2285,9 @@ namespace Oxide.Plugins
         {
             try
             {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/status.php", $"",
-                    (code2, response2) =>
-                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(CheckStatus(code2, response2))), this,
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/status.php", $"version={Version}&serverid={serverId}",
+                    (code2, response2) =>ServerMgr.Instance.StartCoroutine(CheckStatus(code2, response2)), this,
                     Core.Libraries.RequestMethod.POST);
             }
             catch (Exception e)
@@ -2275,13 +2297,15 @@ namespace Oxide.Plugins
             }
         }
 
-        private void GetTransfer(int id)
+        private void GetTransfer()
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/transfer.php", $"targetid={id}",
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                var json = JsonConvert.SerializeObject(_players.Values.ToList());
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/transfer.php", $"targetid={json}",
                     (code2, response2) =>
-                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(Transfer(-1, id, 0, code2, response2))),
+                        ServerMgr.Instance.StartCoroutine(Transfer(-1, 1, 0, code2, response2)),
                     this,
                     Core.Libraries.RequestMethod.POST);
             }
@@ -2292,13 +2316,16 @@ namespace Oxide.Plugins
             }
         }
 
-        private void CheckCompleteTransfer(int id)
+        private void CheckCompleteTransfer()
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/transfer.php", $"playerid={id}",
+            {  
+                
+                var json = JsonConvert.SerializeObject(_players.Values.ToList());
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/transfer.php", $"playerid={json}",
                     (code2, response2) =>
-                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(Transfer(id, -1, 0, code2, response2))),
+                       ServerMgr.Instance.StartCoroutine(Transfer(0, -1, 0, code2, response2)),
                     this,
                     Core.Libraries.RequestMethod.POST);
             }
@@ -2312,12 +2339,13 @@ namespace Oxide.Plugins
         private void SendPromocode(string promo, int id)
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/promocode.php",
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/promocode.php",
                     $"promo={promo}&id={id}",
                     (code2, response2) =>
-                        _coroutines.Add(
-                            ServerMgr.Instance.StartCoroutine(UsePromo(id, code2, response2))),
+                      
+                            ServerMgr.Instance.StartCoroutine(UsePromo(id, code2, response2)),
                     this,
                     Core.Libraries.RequestMethod.POST);
             }
@@ -2331,12 +2359,12 @@ namespace Oxide.Plugins
         private void SendTransfer(int playerid, int targetid, int coins)
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/transfer.php",
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/transfer.php",
                     $"playerid={playerid}&targetid={targetid}&coins={coins}",
                     (code2, response2) =>
-                        _coroutines.Add(
-                            ServerMgr.Instance.StartCoroutine(Transfer(playerid, targetid, coins, code2, response2))),
+                            ServerMgr.Instance.StartCoroutine(Transfer(playerid, targetid, coins, code2, response2)),
                     this,
                     Core.Libraries.RequestMethod.POST);
             }
@@ -2350,9 +2378,10 @@ namespace Oxide.Plugins
         private void Upgrades()
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/upgrades.php", $"",
-                    (code2, response2) => _coroutines.Add(ServerMgr.Instance.StartCoroutine(UpInfo(code2, response2))),
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/upgrades.php", $"",
+                    (code2, response2) => ServerMgr.Instance.StartCoroutine(UpInfo(code2, response2)),
                     this,
                     Core.Libraries.RequestMethod.POST);
             }
@@ -2366,11 +2395,12 @@ namespace Oxide.Plugins
         private void ServerUpdate()
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/servers.php",
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/servers.php",
                     $"ip={Uri.EscapeDataString(ConVar.Server.ip)}&port={ConVar.Server.port.ToString()}&name={Uri.EscapeDataString(ConVar.Server.hostname)}&coins={coins}",
                     (code2, response2) =>
-                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2))), this,
+                       ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2)), this,
                     Core.Libraries.RequestMethod.POST);
             }
             catch (Exception e)
@@ -2383,11 +2413,12 @@ namespace Oxide.Plugins
         private void SetServer()
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/selectserver.php",
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/selectserver.php",
                     $"ip={Uri.EscapeDataString(ConVar.Server.ip)}&port={ConVar.Server.port.ToString()}",
                     (code2, response2) =>
-                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2))), this,
+                     ServerMgr.Instance.StartCoroutine(ServerUpdates(code2, response2)), this,
                     Core.Libraries.RequestMethod.POST);
             }
             catch (Exception e)
@@ -2397,12 +2428,14 @@ namespace Oxide.Plugins
             }
         }
 
-        private void Update(BasePlayer player, double coin, int serverid, Dictionary<int, int> upgrades)
+        private void Update(List<DataPlayer> player)
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/update.php",
-                    $"steamid={player.userID}&name={Uri.EscapeDataString(player.displayName)}&coins={coin}&serverid={serverid}&upgrades={JsonConvert.SerializeObject(upgrades)}",
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                var json = JsonConvert.SerializeObject(player);
+                
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/update.php", $"info={json}",
                     (code2, response2) => { }, this,
                     Core.Libraries.RequestMethod.POST);
             }
@@ -2416,10 +2449,10 @@ namespace Oxide.Plugins
         private void GetInfos(BasePlayer player)
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/getinfo.php", $"steamid={player.userID}",
-                    (code, response) =>
-                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(GetInfo(player, code, response))), this,
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/getinfo.php", $"steamid={player.userID}",
+                    (code, response) =>ServerMgr.Instance.StartCoroutine(GetInfo(player, code, response)), this,
                     Core.Libraries.RequestMethod.POST);
             }
             catch (Exception e)
@@ -2429,13 +2462,15 @@ namespace Oxide.Plugins
             }
         }
 
-        private void GetTopPlayer(BasePlayer player)
+        private void GetTopPlayer()
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/top.php", $"steamid={player.userID}",
-                    (code, response) =>
-                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(TopPlayer(player, code, response))), this,
+            {  
+                
+                var json = JsonConvert.SerializeObject(_players.Values.ToList());
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/getplayertop.php", $"info={json}",
+                    (code, response) =>ServerMgr.Instance.StartCoroutine(TopPlayer(code, response)), this,
                     Core.Libraries.RequestMethod.POST);
             }
             catch (Exception e)
@@ -2448,10 +2483,10 @@ namespace Oxide.Plugins
         private void AllPlayersTop()
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/top.php", $"max=8",
-                    (code, response) =>
-                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(AllPlayersTops(null, code, response))), this,
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/top.php", $"max=8",
+                    (code, response) =>ServerMgr.Instance.StartCoroutine(AllPlayersTops(null, code, response)), this,
                     Core.Libraries.RequestMethod.POST);
             }
             catch (Exception e)
@@ -2464,10 +2499,10 @@ namespace Oxide.Plugins
         private void GetServerTops()
         {
             try
-            {
-                test.Enqueue($"https://rustcoin.foxplugins.ru/rustcoin/top.php", $"id={serverId}&max=8",
-                    (code, response) =>
-                        _coroutines.Add(ServerMgr.Instance.StartCoroutine(TopPlayer(null, code, response))), this,
+            {  
+                var url = testCoin ? "deeprust" : "rustcoin";
+                test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/top.php", $"id={serverId}&max=8",
+                    (code, response) =>ServerMgr.Instance.StartCoroutine(TopPlayer(null, code, response)), this,
                     Core.Libraries.RequestMethod.POST);
             }
             catch (Exception e)
@@ -2498,13 +2533,15 @@ namespace Oxide.Plugins
             while (this.IsLoaded)
             {
                 Upgrades();
-                yield return CoroutineEx.waitForSeconds(60f);
+                yield return CoroutineEx.waitForSeconds(15f);
                 if (!IsLoaded) yield break;
                 ServerUpdate();
+                yield return CoroutineEx.waitForSeconds(5f);
                 StatusCheck();
+                yield return CoroutineEx.waitForSeconds(5f);
+                var list = new List<DataPlayer>();
                 foreach (var player in _players)
                 {
-                    GetTopPlayer(player.Key);
                     double add = player.Value.upgrades.ToList().Sum(p =>
                     {
                         var t = 0.0;
@@ -2531,9 +2568,7 @@ namespace Oxide.Plugins
                     player.Value.coins += add;
                     player.Value.serverid = serverId;
                     coins += add;
-                    GetTransfer(player.Value.id);
-                    CheckCompleteTransfer(player.Value.id);
-                    Update(player.Key, player.Value.coins, player.Value.serverid, player.Value.upgrades);
+                    list.Add(player.Value);
                     if (_openInterface.ContainsKey(player.Key))
                     {
                         if (_openInterface[player.Key].Interface == "main") UpdateBalance(player.Key);
@@ -2542,9 +2577,20 @@ namespace Oxide.Plugins
                                 $"RCOIN_CONS OPEN UPGRADES {_openInterface[player.Key].Page}");
                     }
                 }
-
+                
+                yield return CoroutineEx.waitForSeconds(5f);
+                GetTopPlayer();
+                yield return CoroutineEx.waitForSeconds(5f);
+                GetTransfer();
+                yield return CoroutineEx.waitForSeconds(5f);
+                CheckCompleteTransfer();
+                yield return CoroutineEx.waitForSeconds(5f);
+                Update(list);
+                yield return CoroutineEx.waitForSeconds(5f);
                 AllPlayersTop();
+                yield return CoroutineEx.waitForSeconds(5f);
                 GetServerTops();
+                yield return CoroutineEx.waitForSeconds(5f);
             }
 
             yield break;
@@ -2552,12 +2598,7 @@ namespace Oxide.Plugins
 
         private Dictionary<BasePlayer, InterfaceInfo> _openInterface = new Dictionary<BasePlayer, InterfaceInfo>();
         private Dictionary<BasePlayer, DataPlayer> _players = new Dictionary<BasePlayer, DataPlayer>();
-
-        class PluginStatus
-        {
-            public int id;
-            public int status;
-        }
+        
 
         private Dictionary<ulong, TranferSendInfo> _transferInfo = new Dictionary<ulong, TranferSendInfo>();
         class TranferSendInfo
@@ -2575,6 +2616,10 @@ namespace Oxide.Plugins
         class DataPlayer
         {
             public int id;
+            
+            public ulong steamid;
+            
+            public string name;
 
             public double coins;
 
@@ -2633,7 +2678,7 @@ namespace Oxide.Plugins
 
         private List<TopInfo> _topAllPlayers = new List<TopInfo>();
         private List<TopInfo> _topServer = new List<TopInfo>();
-        private Dictionary<BasePlayer, string> _top = new Dictionary<BasePlayer, string>();
+        private Dictionary<ulong, string> _top = new Dictionary<ulong, string>();
 
         IEnumerator AllPlayersTops(BasePlayer player, int code, string response)
         {
@@ -2657,16 +2702,27 @@ namespace Oxide.Plugins
             yield break;
         }
 
+        IEnumerator TopPlayer(int code, string response)
+        {
+            if (!IsLoaded) yield break;
+            if (response == null) yield break;
+            if (code == 200)
+            {
+                var json = JsonConvert.DeserializeObject<Dictionary<ulong, int>>(response);
+                foreach (var keyValuePair in json)
+                {
+                    _top[keyValuePair.Key] = keyValuePair.Value.ToString();
+                }
+            }
+
+            yield break;
+        }
         IEnumerator TopPlayer(BasePlayer player, int code, string response)
         {
             if (!IsLoaded) yield break;
             if (response == null) yield break;
             if (code == 200)
             {
-                int top;
-                if (int.TryParse(response, out top)) _top[player] = response;
-                else
-                {
                     if (!response.Contains("top")) yield break;
                     var json = JsonConvert.DeserializeObject<Dictionary<int, TopInfo>>(response);
                     _topServer.Clear();
@@ -2676,7 +2732,6 @@ namespace Oxide.Plugins
                     }
 
                     GenerateTop();
-                }
 
                 yield break;
             }
@@ -2724,13 +2779,7 @@ namespace Oxide.Plugins
             if (response == null) yield break;
             if (code == 200)
             {
-                var json = JsonConvert.DeserializeObject<PluginStatus>(response);
-                if (json == null)
-                {
-                    yield break;
-                }
-
-                if (json.status == 0)
+                if (response == "DISABLED")
                 {
                     if (status == 1)
                     {
@@ -2741,17 +2790,34 @@ namespace Oxide.Plugins
                         _top.Clear();
                     }
 
-                    if (status != json.status)
+                    if (status != 0)
                     {
                         Debug.LogError("[RUST-COIN] Плагин временно не работает!");
-                        status = json.status;
+                        status = 0;
+                        start = ServerMgr.Instance.StartCoroutine(UpdateMysql());
                     }
                 }
-                else
+                else if (response == "ENABLED")
                 {
                     if (status == 0)
                         Interface.Oxide.ReloadPlugin(Name);
                     status = 1;
+                }
+                else
+                {
+                    Debug.LogError($"Ваша версия устарела. Обновитесь до {response}");
+                   
+                    if (status == 1)
+                    {
+                        MediumUnload();
+                        _upgrades.Clear();
+                        _topAllPlayers.Clear();
+                        _topServer.Clear();
+                        _top.Clear();
+                        start = ServerMgr.Instance.StartCoroutine(UpdateMysql());
+                    }
+                    
+                    status = 0;
                 }
             }
 
@@ -2820,12 +2886,11 @@ namespace Oxide.Plugins
                 {
                     yield break;
                 }
-
                 foreach (var transfers in json)
                 {
                     if (transfers.Value.complete == 1)
                     {
-                        var player = _players.FirstOrDefault(p => p.Value.id == targetid);
+                        var player = _players.FirstOrDefault(p => p.Value.id == transfers.Value.id);
                         if (player.Value == null) continue;
                         player.Value.coins += transfers.Value.coins;
                         ReplySend(player.Key,
@@ -2833,7 +2898,7 @@ namespace Oxide.Plugins
                     }
                     else if (transfers.Value.complete == 2)
                     {
-                        var player = _players.FirstOrDefault(p => p.Value.id == playerid);
+                        var player = _players.FirstOrDefault(p => p.Value.id == transfers.Value.id);
                         if (player.Value == null) continue;
                         ReplySend(player.Key,
                             $"[RUST-COIN] Игрок {transfers.Value.name} получил от вас {transfers.Value.coins} RC [/rcoin]");
@@ -2878,7 +2943,15 @@ namespace Oxide.Plugins
             {
                 if (response == "test")
                 {
-                    Update(player, 0, serverId, new Dictionary<int, int>());
+                    Update(new List<DataPlayer>
+                    {
+                        new DataPlayer()
+                        {
+                            steamid = player.userID,
+                            name = player.displayName,
+                            serverid = serverId
+                        }
+                    }); 
                     yield return CoroutineEx.waitForSeconds(2f);
                     if (!IsLoaded) yield break;
                     GetInfos(player);
@@ -2893,12 +2966,14 @@ namespace Oxide.Plugins
 
                 _players.Add(player, new DataPlayer
                 {
+                    name = player.displayName,
+                    steamid = player.userID,
                     id = json.id,
                     coins = json.coins,
                     serverid = json.serverid,
                     upgrades = JsonConvert.DeserializeObject<Dictionary<int, int>>(json.upgrades)
                 });
-                GetTopPlayer(player);
+                GetTopPlayer();
                 yield break;
             }
 
