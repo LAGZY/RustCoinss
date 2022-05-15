@@ -26,6 +26,9 @@ namespace Oxide.Plugins
 
         public class Configuration
         {
+            [JsonProperty("Включить звук при нажатие?")]
+            public bool IsTapVolume { get; set; } = true;
+            
             [JsonProperty("Включить товары на сервере?")]
             public bool isShopWorking { get; set; } = false;
 
@@ -1971,9 +1974,14 @@ namespace Oxide.Plugins
                     else _lastClick[player.userID] = DateTime.Now;
                     AddMoney(player, 0.001);
                     UpdateBalance(player);
-                    Effect Sound1 = new Effect("assets/bundled/prefabs/fx/notice/loot.drag.grab.fx.prefab", player, 0,
-                        new Vector3(), new Vector3());
-                    EffectNetwork.Send(Sound1, player.Connection);
+                    if(_config.IsTapVolume)
+                    {
+                        Effect Sound1 = new Effect("assets/bundled/prefabs/fx/notice/loot.drag.grab.fx.prefab", player,
+                            0,
+                            new Vector3(), new Vector3());
+                        EffectNetwork.Send(Sound1, player.Connection);
+                    }
+                    
                     break;
                 }
                 case "OPEN":
@@ -2434,7 +2442,6 @@ namespace Oxide.Plugins
             {  
                 var url = testCoin ? "deeprust" : "rustcoin";
                 var json = JsonConvert.SerializeObject(player);
-                
                 test.Enqueue($"https://{url}.foxplugins.ru/rustcoin/update.php", $"info={json}",
                     (code2, response2) => { }, this,
                     Core.Libraries.RequestMethod.POST);
@@ -2523,7 +2530,7 @@ namespace Oxide.Plugins
             }
 
             SetServer();
-            yield return CoroutineEx.waitForSeconds(2f);
+            yield return CoroutineEx.waitForSeconds(3f);
             foreach (var basePlayer in BasePlayer.activePlayerList)
             {
                 OnPlayerConnected(basePlayer);
@@ -2805,7 +2812,7 @@ namespace Oxide.Plugins
                 }
                 else
                 {
-                    Debug.LogError($"Ваша версия устарела. Обновитесь до {response}");
+                    Debug.LogError($"[RUST-COIN] Ваша версия устарела. Обновитесь до {response}");
                    
                     if (status == 1)
                     {
