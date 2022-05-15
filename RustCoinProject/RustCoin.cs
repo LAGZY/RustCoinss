@@ -155,6 +155,7 @@ namespace Oxide.Plugins
         public string promo_main = "https://imgur.com/oZXxwL1.png";
         public string shop_main = "https://imgur.com/1uaFQMX.png";
         public string shop_slotimg = "https://imgur.com/m9bqNN8.png";
+        public string qr_code = "https://megargan.foxplugins.ru/Image/RustCoin/qr-code2.png";
 
         private Coroutine start;
         private WebRequests test = new WebRequests();
@@ -167,6 +168,7 @@ namespace Oxide.Plugins
             {
                 Debug.LogError("[RUST-COIN] ImageLibrary не установлена!!! Плагин работать не будет!!");
                 Interface.Oxide.UnloadPlugin(Name);
+                return;
             }
 
             if (_config.isShopWorking)
@@ -196,6 +198,7 @@ namespace Oxide.Plugins
             ImageLibrary.Call("AddImage", promo_main, promo_main);
             ImageLibrary.Call("AddImage", shop_main, shop_main);
             ImageLibrary.Call("AddImage", shop_slotimg, shop_slotimg);
+            ImageLibrary.Call("AddImage", qr_code, qr_code);
             
             
             AddCovalenceCommand("RCOIN_CONS", nameof(Commands));
@@ -1484,6 +1487,7 @@ namespace Oxide.Plugins
                 {
                     new CuiInputFieldComponent
                     {
+                        NeedsKeyboard = true,
                         LineType = InputField.LineType.MultiLineSubmit,
                         Align = TextAnchor.MiddleCenter,
                         CharsLimit = 5,
@@ -1506,6 +1510,7 @@ namespace Oxide.Plugins
                 {
                     new CuiInputFieldComponent
                     {
+                        NeedsKeyboard = true,
                         Command = "RCOIN_CONS TRANSFER addamount ",
                         LineType = InputField.LineType.MultiLineSubmit,
                         Align = TextAnchor.MiddleCenter,
@@ -1537,10 +1542,7 @@ namespace Oxide.Plugins
                     Text = { Text = ""}
                 
             },"Transfer_plate");
-            
-            
-            
-            
+
             transfer_json = transfer.ToJson();
 
         }
@@ -1618,6 +1620,37 @@ namespace Oxide.Plugins
                     }
                 }
             });
+            
+            promo.Add(new CuiElement
+            {
+                Parent = "promo_plate",
+                Name = "QRCODE",
+                Components =
+                {
+                    new CuiRawImageComponent
+                    {
+                        Png = GetImage(qr_code),
+                    },
+                    new CuiRectTransformComponent
+                    {
+                        AnchorMin = "0.5 0.5",
+                        AnchorMax = "0.5 0.5",
+                        OffsetMin = "-60 -100",
+                        OffsetMax = "59 20"
+                    }
+                }
+            });
+            promo.Add(new CuiLabel
+            {
+                RectTransform =
+                {
+                    AnchorMin = "0.5 0",
+                    AnchorMax = "0.5 0",
+                    OffsetMin = "-60 -25",
+                    OffsetMax = "60 -5"
+                },
+                Text = {Text = "НАШ TELEGRAM"}
+            },"QRCODE");
             promocodes_json = promo.ToJson();
             GenerateShop();
         }
@@ -1842,7 +1875,7 @@ namespace Oxide.Plugins
             _openInterface[player] = new InterfaceInfo
             {
                 Interface = "main",
-                Page = 0,
+                Page = 0
             };
         }
 
